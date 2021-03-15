@@ -1,7 +1,8 @@
 package com.rental.util;
 
-//import com.rental.entity.Reservation;
+import com.rental.entity.Reservation;
 import com.rental.entity.User;
+import com.rental.entity.Vehicle;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -30,12 +31,14 @@ public class HibernateUtil {
 
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
-                settings.put(Environment.HBM2DDL_AUTO, "create-drop");
+                settings.put(Environment.HBM2DDL_AUTO, "update");
 
                 configuration.setProperties(settings);
 
-                //configuration.addAnnotatedClass(Reservation.class);
+                //Annotations
                 configuration.addAnnotatedClass(User.class);
+                configuration.addAnnotatedClass(Reservation.class);
+                configuration.addAnnotatedClass(Vehicle.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
