@@ -8,7 +8,7 @@ public class User {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "id")
     private int id;
 
     @Column
@@ -21,10 +21,10 @@ public class User {
     private String email;
 
     @Column
-    private String idType;
+    private String password;
 
-    @Column
-    private String idNumber;
+    /*@OneToOne(mappedBy = "reservation")
+    private Reservation reservation;*/
 
     @Column
     private boolean isAdmin;
@@ -41,12 +41,21 @@ public class User {
         this.email = email;
     }
 
-    public User(String firstName, String lastName, String idType, String email, String idNumber, boolean isAdmin) {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String email, String password, boolean isAdmin) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.idType = idType;
-        this.idNumber = idNumber;
+       // this.idType = idType;
+        this.password = password;
+       // this.idNumber = idNumber;
         this.isAdmin = isAdmin;
     }
 
@@ -66,7 +75,7 @@ public class User {
         isAdmin = admin;
     }
 
-    public String getIdType() {
+  /*  public String getIdType() {
         return idType;
     }
 
@@ -80,7 +89,7 @@ public class User {
 
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
-    }
+    } */
 
     public boolean getIsAdmin() {
         return isAdmin;
@@ -113,8 +122,9 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email=' " + email + '\'' +
-                ", idType='" + idType + '\'' +
-                ", idNumber='" + idNumber + '\'' +
+   //             ", idType='" + idType + '\'' +
+                ", password='" + password + '\'' +
+   //             ", idNumber='" + idNumber + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
     }

@@ -1,4 +1,4 @@
-package com.rental.entity;
+/*package com.rental.entity;
 
 import javax.persistence.*;
 
@@ -11,13 +11,15 @@ public class Reservation {
     @Column
     private int id;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle theVehicle;
 
     @Column
     private String startDate;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User theCustomer;
 
     public  Reservation() {
@@ -71,4 +73,4 @@ public class Reservation {
                 ", startDate='" + startDate + '\'' +
                 '}';
     }
-}
+}*/

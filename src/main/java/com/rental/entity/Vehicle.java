@@ -23,6 +23,9 @@ public class Vehicle {
     @Column
     private String manufacturer;
 
+ /*   @OneToOne(mappedBy = "reservation")
+    private Reservation reservation;*/
+
     public Vehicle(String type, String licencePlate, String model, String manufacturer) {
         this.type = type;
         this.licencePlate = licencePlate;

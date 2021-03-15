@@ -1,12 +1,13 @@
 package com.rental.servlet;
 
 
-import com.rental.dao.ReservationDao;
+//import com.rental.dao.ReservationDao;
 import com.rental.dao.UserDao;
 import com.rental.dao.VehicleDao;
-import com.rental.entity.Reservation;
+//import com.rental.entity.Reservation;
 import com.rental.entity.User;
 import com.rental.entity.Vehicle;
+import org.dom4j.util.AttributeHelper;
 import sun.rmi.server.Dispatcher;
 
 import javax.servlet.*;
@@ -51,9 +52,6 @@ public class CarParkControllerServlet extends HttpServlet {
                 case "UPDATE":
                     updateReservation(request, response); */
 
-                case "LOGOUT":
-                    logout(request, response);
-
                 default:
                     listReservation(request, response);
             }
@@ -65,29 +63,16 @@ public class CarParkControllerServlet extends HttpServlet {
 
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        ReservationDao reservationDao = new ReservationDao();
+
+
+       /* ReservationDao reservationDao = new ReservationDao();
         List<Reservation> reservations = reservationDao.getReservations();
-        request.setAttribute("reservation_list", reservations);
+        request.setAttribute("reservation_list", reservations);*/
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage");
         dispatcher.forward(request, response);
 
     }
-
-    protected void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        response.setContentType("text/html");
-        PrintWriter out=response.getWriter();
-
-        request.getRequestDispatcher("login.html").include(request, response);
-
-        HttpSession session=request.getSession();
-        session.invalidate();
-
-        out.print("You have successfully logged out!");
-
-        out.close();
-
-    }
+}
 
 
    /*private void addReservation(HttpServletRequest request, HttpServletResponse response) {
@@ -119,27 +104,3 @@ public class CarParkControllerServlet extends HttpServlet {
 
     private void loadReservation(HttpServletRequest request, HttpServletResponse response) {
     } */
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        PrintWriter printWriter = response.getWriter();
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
-
-        String name = request.getParameter("username");
-        String password = request.getParameter("userpassword");
-
-        if (password.equals("1234")) {
-            printWriter.print("Welcome, " + name);
-            HttpSession session = request.getSession();
-            session.setAttribute("username", name);
-            dispatcher.forward(request, response);
-        } else {
-            printWriter.print("Wrong data submitted");
-            request.getRequestDispatcher("login.html");
-        }
-
-        printWriter.close();
-
-    }
-}

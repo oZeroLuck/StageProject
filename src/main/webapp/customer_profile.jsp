@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<form action="CarParkControllerServlet" method="GET">
+<form action="UserControllerServlet" method="GET">
 
     <input type="hidden" name="command" value="LOGOUT" />
 

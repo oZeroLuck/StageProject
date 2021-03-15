@@ -1,6 +1,7 @@
 package com.rental.util;
 
-import com.rental.entity.Reservation;
+//import com.rental.entity.Reservation;
+import com.rental.entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -20,7 +21,7 @@ public class HibernateUtil {
 
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/hibernate_db?useSSL=false");
+                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/car_park_db?useSSL=false");
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "RootPass1");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
@@ -33,7 +34,8 @@ public class HibernateUtil {
 
                 configuration.setProperties(settings);
 
-                configuration.addAnnotatedClass(Reservation.class);
+                //configuration.addAnnotatedClass(Reservation.class);
+                configuration.addAnnotatedClass(User.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
