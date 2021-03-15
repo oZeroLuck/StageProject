@@ -1,4 +1,4 @@
-/*package com.rental.dao;
+package com.rental.dao;
 
 import java.util.List;
 
@@ -33,4 +33,4 @@ public class ReservationDao {
         }
     }
 
-}*/
+}
