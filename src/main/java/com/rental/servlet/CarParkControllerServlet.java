@@ -1,20 +1,17 @@
 package com.rental.servlet;
 
 
-//import com.rental.dao.ReservationDao;
-import com.rental.dao.UserDao;
+import com.rental.dao.ReservationDao;
 import com.rental.dao.VehicleDao;
-//import com.rental.entity.Reservation;
+import com.rental.entity.Reservation;
 import com.rental.entity.User;
 import com.rental.entity.Vehicle;
-import org.dom4j.util.AttributeHelper;
-import sun.rmi.server.Dispatcher;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "CarParkControllerServlet", value = "/CarParkControllerServlet")
@@ -40,11 +37,16 @@ public class CarParkControllerServlet extends HttpServlet {
                 case "LIST":
                     listReservation(request, response);
 
-           /*     case "LOAD":
-                    loadReservation(request, response);
+                case "LOAD_CARS":
+                    loadVehicles(request, response);
 
                 case "ADD":
                     addReservation(request, response);
+
+           /*   TODO: Add these functions
+
+                case "LOAD":
+                    loadReservation(request, response);
 
                 case "DELETE":
                     deleteReservation(request, response);
@@ -63,44 +65,65 @@ public class CarParkControllerServlet extends HttpServlet {
 
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-
-
-       /* ReservationDao reservationDao = new ReservationDao();
+        ReservationDao reservationDao = new ReservationDao();
         List<Reservation> reservations = reservationDao.getReservations();
-        request.setAttribute("reservation_list", reservations);*/
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage");
+        request.setAttribute("reservation_list", reservations);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
         dispatcher.forward(request, response);
 
     }
-}
+
+    private void loadVehicles(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        VehicleDao vehicleDao = new VehicleDao();
+        List<Vehicle> vehicles = vehicleDao.getVehicles();
+        request.setAttribute("vehicles_list", vehicles);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("add_reservation.jsp");
+        dispatcher.forward(request, response);
+
+    }
 
 
-   /*private void addReservation(HttpServletRequest request, HttpServletResponse response) {
+    private void addReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
-        Cookie[] c = request.getCookies();
+        //Get user from session
+        HttpSession session = request.getSession();
+        User currentUser =(User) session.getAttribute("user");
 
+        //Get vehicle id
+        String vehicleId = request.getParameter("vehicleId");
+
+        //Set date
         Date currentDate = new Date();
-        Vehicle theVehicle = VehicleDao.getVehicle(request.getParameter("vehicle"));
-        User theCustomer = UserDao.getCustomer(c);
+
+        //Get vehicle from id
+        VehicleDao vehicleDao = new VehicleDao();
+        Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
+
         String startDate = currentDate.toString();
 
-        Reservation theReservation = new Reservation(theVehicle, startDate, theCustomer);
+        Reservation theReservation = new Reservation(theVehicle, startDate, currentUser);
         ReservationDao theReservationDao = new ReservationDao();
 
         theReservationDao.saveReservation(theReservation);
 
-        request.setAttribute("command", "LIST");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("car_rental/customer_homepage.jsp");
-        dispatcher.forward(request, response);
+        listReservation(request, response);
 
-        }
+    }
 
 
+}
+
+/*
     private void updateReservation(HttpServletRequest request, HttpServletResponse response) {
     }
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession();
+
     }
+
 
     private void loadReservation(HttpServletRequest request, HttpServletResponse response) {
     } */

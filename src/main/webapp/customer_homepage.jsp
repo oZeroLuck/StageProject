@@ -1,5 +1,5 @@
+<%@ page import="com.rental.entity.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core_1_1" %>
-<!-- Formatting type -->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- Preparing the locale -->
 <c:set var="theLocale"
@@ -28,10 +28,18 @@
 
     <hr>
 
+    <h2><fmt:message key="label.welcome"/> <c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/> !</h2>
+
+    <hr>
+
     <br/>
 
+    <c:url var="addLink" value="CarParkControllerServlet">
+        <c:param name ="command" value="LOAD_CARS" />
+    </c:url>
+
     <input type="button" value="<fmt:message key="label.addReservation" />"
-            onclick="window.location.href='add_reservation.jsp'; return false;"
+            onclick="window.location.href='${addLink}'; return false;"
             class="add_student_button" />
 
     <br/><br/>
@@ -60,18 +68,23 @@
                     <!-- Setting up temporary delete links for every reservation -->
                     <c:url var="deleteLink" value="CarParkControllerServlet">
                         <c:param name="command" value="DELETE" />
-                        <c:param name="reservationId" value="${tempReservation.it}"/>
+                        <c:param name="reservationId" value="${tempReservation.id}"/>
                     </c:url>
 
-                </c:forEach>
 
-                <tr>
-                    <td>${tempReservation.id}</td>
-                    <td>${tempReservation.car.type}</td>
-                    <td>${tempReservation.date}</td>
-                    <td>${changeLink}</td>
-                    <td>${deleteLink}</td>
-                </tr>
+
+                    <tr>
+                        <td>${tempReservation.id}</td>
+                        <td>${tempReservation.theVehicle.type}</td>
+                        <td>${tempReservation.startDate}</td>
+                        <td><a href ="${changeLink}">Update</a>
+                             | <!-- Setting a confirmation message -->
+                        <a href ="${deleteLink}"
+                           onclick="if(!(confirm('Are you sure you want to delete this reservation?'))) return false">
+                                Delete</a> </td>
+                     </tr>
+
+                </c:forEach>
 
             </table>
 
