@@ -16,7 +16,7 @@
 
 <h1>Login</h1>
 
-<form action="UserControllerServlet" method="POST">
+<form action="UserControllerServlet" method="post">
 
     Name:<input type="text" name="username"><br/><br/>
     Password:<input type="text" name="userpassword"><br/><br/>
@@ -25,10 +25,9 @@
 
 </form>
 
-<!-- temporary -->
-
 <hr>
 
+<!-- Testing
 <table>
     <tr>
         <th>Name</th>
@@ -46,6 +45,6 @@
     </tr>
     </c:forEach>
 </table>
-
+-->
 </body>
 </html>
