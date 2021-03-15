@@ -82,8 +82,7 @@ public class UserControllerServlet extends HttpServlet {
 
         newUserDao.saveCustomer(newUser);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-        dispatcher.forward(request, response);
+        listUsers(request, response);
 
     }
 
@@ -105,6 +104,9 @@ public class UserControllerServlet extends HttpServlet {
         String email= request.getParameter("username");
         String password = request.getParameter("userpassword");
 
+        //Test
+        //System.out.println(email + " " + password);
+
         UserDao userDao = new UserDao();
 
         try {
@@ -114,6 +116,7 @@ public class UserControllerServlet extends HttpServlet {
             if (theUser != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", theUser);
+                destination = "customer_homepage.jsp";
             } else {
                 String message = "Invalid user/pass";
                 request.setAttribute("message", message);

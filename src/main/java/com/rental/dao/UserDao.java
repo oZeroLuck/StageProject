@@ -30,13 +30,41 @@ public class UserDao {
 
     public List<User> getCustomers() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from User", User.class).list();
+            return session.createQuery("FROM User", User.class).list();
         }
     }
 
     public User checkLogin(String email, String password) throws Exception {
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        User user = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("FROM User U WHERE U.email = :email").setParameter("email", email).uniqueResult();
+
+            //Testing
+            //System.out.println(user.getEmail() + " " + user.getPassword() );
+
+
+            if (user != null && user.getPassword().equals(password)) {
+                //Testing
+                //System.out.println("Trovato!");
+                return user;
+            }
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction !=null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
+
+        //Testing
+        //System.out.println("Non trovato :(");
+        return null;
+       /* Session session = HibernateUtil.getSessionFactory().openSession();
         if (session != null) {
             try {
                 User user = (User) session.get(User.class, email);
@@ -46,6 +74,6 @@ public class UserDao {
                 return null;
             }
         }
-        return null;
+        return null; */
     }
 }
