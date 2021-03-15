@@ -1,9 +1,10 @@
 package com.rental.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table
+@Table(name="USER")
 public class User {
 
     @Id
@@ -23,8 +24,8 @@ public class User {
     @Column
     private String password;
 
-    /*@OneToOne(mappedBy = "reservation")
-    private Reservation reservation;*/
+    @OneToMany(mappedBy = "theCustomer")
+    private List<Reservation> reservations;
 
     @Column
     private boolean isAdmin;
@@ -49,7 +50,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String firstName, String lastName, String email, String password, boolean isAdmin) {
+    public User(String firstName, String lastName, String email, String password, boolean isAdmin, List<Reservation> reservations) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -57,6 +58,7 @@ public class User {
         this.password = password;
        // this.idNumber = idNumber;
         this.isAdmin = isAdmin;
+        this.reservations = reservations;
     }
 
     public int getUserId() {
@@ -127,5 +129,13 @@ public class User {
    //             ", idNumber='" + idNumber + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
