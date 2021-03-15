@@ -19,7 +19,7 @@
 
     <input type="hidden" name="command" value="LOGOUT" />
 
-    <input type="submit" name="Submit" />
+    <input type="submit" name="Logout" />
 
 </form>
 
