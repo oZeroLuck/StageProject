@@ -20,15 +20,8 @@ public class UserControllerServlet extends HttpServlet {
             // Getting the command from the request
             String commandId = request.getParameter("command");
 
-            // Temporary "exception" catch
-            if (commandId == null)
-                commandId = "LIST";
-
             // Dispatch
             switch (commandId) {
-                case "LIST":
-                    listUsers(request, response);
-
                 case "REG":
                     userRegister(request, response);
 
@@ -45,6 +38,41 @@ public class UserControllerServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String email= request.getParameter("username");
+        String password = request.getParameter("userpassword");
+
+        //Test
+        System.out.println(email + " " + password);
+
+        UserDao userDao = new UserDao();
+
+        try {
+            User theUser = userDao.checkLogin(email, password);
+            String destination = "login.jsp";
+
+            if (theUser != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("user", theUser);
+                session.setAttribute("command", "LIST");
+                destination = "CarParkControllerServlet";
+            } else {
+                String message = "Invalid user/pass";
+                request.setAttribute("message", message);
+            }
+
+            response.sendRedirect(destination);
+        } catch (Exception e)  {
+            throw new ServletException(e);
+        }
+
+
+    }
+
+    //Methods
+
     private void listUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         UserDao userDao = new UserDao();
@@ -56,19 +84,19 @@ public class UserControllerServlet extends HttpServlet {
 
     protected void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
 
-            request.getRequestDispatcher("login.jsp").include(request, response);
+        request.getRequestDispatcher("login.jsp").include(request, response);
 
-            HttpSession session = request.getSession();
-            session.invalidate();
+        HttpSession session = request.getSession();
+        session.invalidate();
 
-            out.print("You have successfully logged out!");
+        out.print("You have successfully logged out!");
 
-            out.close();
+        out.close();
 
-            }
+    }
 
     private void userRegister (HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -77,7 +105,7 @@ public class UserControllerServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User newUser = new User(firstName, lastName, email, password, false);
+        User newUser = new User(firstName, lastName, email, password, false, null);
         UserDao newUserDao = new UserDao();
 
         newUserDao.saveCustomer(newUser);
@@ -95,39 +123,6 @@ public class UserControllerServlet extends HttpServlet {
         out.print("<html><body>");
         out.print(commandId);
         out.print("</body></html>");
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String email= request.getParameter("username");
-        String password = request.getParameter("userpassword");
-
-        //Test
-        //System.out.println(email + " " + password);
-
-        UserDao userDao = new UserDao();
-
-        try {
-            User theUser = userDao.checkLogin(email, password);
-            String destination = "login.jsp";
-
-            if (theUser != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", theUser);
-                destination = "customer_homepage.jsp";
-            } else {
-                String message = "Invalid user/pass";
-                request.setAttribute("message", message);
-            }
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher(destination);
-            dispatcher.forward(request, response);
-        } catch (Exception e)  {
-            throw new ServletException(e);
-        }
-
 
     }
 
