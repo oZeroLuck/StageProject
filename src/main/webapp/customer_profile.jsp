@@ -15,11 +15,23 @@
 </head>
 <body>
 
+<div id="wrapper">
+    <div id="header">
+        <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+        |
+        <a href="customer_car_park.jsp"><fmt:message key="label.carPark" /></a>
+        |
+        <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
+    </div>
+</div>
+
+<hr>
+
 <form action="UserControllerServlet" method="GET">
 
     <input type="hidden" name="command" value="LOGOUT" />
 
-    <input type="submit" name="Logout" />
+    <input type="submit" value="Logout"/>
 
 </form>
 
