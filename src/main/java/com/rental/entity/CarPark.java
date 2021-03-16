@@ -1,4 +1,6 @@
 package com.rental.entity;
+//TODO: Create me pls
+
 /*  Temporary removal to create a faster test
 import javax.persistence.*;
 import java.util.List;

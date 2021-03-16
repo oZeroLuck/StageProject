@@ -10,6 +10,8 @@
 
 <fmt:setBundle basename="labels" />
 
+<!-- TODO: Refactor to meet the requested specification -->
+
 <html>
 <head>
     <title><fmt:message key="label.registrationForm"/></title>

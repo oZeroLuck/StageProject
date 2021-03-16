@@ -38,6 +38,8 @@ public class UserControllerServlet extends HttpServlet {
         }
     }
 
+
+    //TODO: Check for user type
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

@@ -7,6 +7,9 @@
 <fmt:setLocale value="${theLocale}" />
 
 <fmt:setBundle basename="labels" />
+
+<!-- TODO: Refactor to meet requested specifications -->
+
 <html>
 <head>
     <meta charset="UTF-8">

@@ -9,6 +9,8 @@
 
 <fmt:setBundle basename="labels" />
 
+<!-- TODO: Add more functionalities -->
+
 <html>
 <head>
     <title><fmt:message key="label.userProfile"/> </title>
