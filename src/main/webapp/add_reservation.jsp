@@ -60,14 +60,17 @@
     </table>
     <br/><br/>
 
-    <fmt:message key="label.duration"/> :
-        <select name="duration" id="duration">
-            <option value="1h">1h</option>
-            <option value="2h">2h</option>
-            <option value="3h">3h</option>
-            <option value="24h">24h</option>
-        </select>
+    <!-- TODO: Find a way to set dates for start and end -->
 
+    <fmt:message key="label.startDate"/> :
+        <input type="date" id="start" name="startDate"
+                value="<fmt:formatDate value="${now}" pattern="yyyyy-MM-dd" />"
+                min="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" max="2099-12-31">
+     |
+    <fmt:message key="label.endDate" />:
+        <input type="date" id="end" name="endDate"
+                value="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />"
+                min="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" max="2099-12-31">
     <br/><br/>
 
     <input type="submit" value="<fmt:message key="label.add"/>">
