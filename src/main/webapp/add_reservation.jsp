@@ -29,7 +29,7 @@
 
 <hr>
 
-<form action="CarParkControllerServlet">
+<form action="CarParkControllerServlet" method="post">
 
     <input type="hidden" name="command" value="ADD"/>
 
