@@ -1,3 +1,4 @@
+//TODO: Change the correlation between vehicle and reservation
 package com.rental.entity;
 
 import javax.persistence.*;

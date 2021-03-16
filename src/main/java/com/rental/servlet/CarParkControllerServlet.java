@@ -1,6 +1,5 @@
 package com.rental.servlet;
 
-
 import com.rental.dao.ReservationDao;
 import com.rental.dao.VehicleDao;
 import com.rental.entity.Reservation;
@@ -63,6 +62,7 @@ public class CarParkControllerServlet extends HttpServlet {
 
     }
 
+    //TODO: Fix the listing to only list the logged customer's reservations
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         /*HttpSession session = request.getSession();
