@@ -24,6 +24,10 @@ public class Vehicle {
     @Column
     private String manufacturer;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="reservation_id", referencedColumnName = "id")
+    private Reservation reservation;
+
     public Reservation getReservation() {
         return reservation;
     }
@@ -32,8 +36,6 @@ public class Vehicle {
         this.reservation = reservation;
     }
 
-    @OneToOne(mappedBy = "theVehicle")
-    private Reservation reservation;
 
     public Vehicle(String type, String licencePlate, String model, String manufacturer) {
         this.type = type;

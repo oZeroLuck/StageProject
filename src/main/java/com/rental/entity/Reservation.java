@@ -11,12 +11,14 @@ public class Reservation {
     @Column(name = "id")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "reservation")
     private Vehicle theVehicle;
 
     @Column
     private String startDate;
+
+    @Column
+    private String duration;
 
     @ManyToOne
     @JoinColumn(name="customer_id", nullable = false)
@@ -26,9 +28,10 @@ public class Reservation {
 
     }
 
-    public Reservation(Vehicle theVehicle, String startDate, User theCustomer) {
+    public Reservation(Vehicle theVehicle, String startDate, String duration, User theCustomer) {
         this.theVehicle = theVehicle;
         this.startDate = startDate;
+        this.duration = duration;
         this.theCustomer = theCustomer;
     }
 
@@ -64,13 +67,11 @@ public class Reservation {
         this.theCustomer = theCustomer;
     }
 
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "reservationId='" + id + '\'' +
-                ", theVehicle='" + theVehicle + '\'' +
-                ", theCustimer='" + theCustomer + '\'' +
-                ", startDate='" + startDate + '\'' +
-                '}';
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }
