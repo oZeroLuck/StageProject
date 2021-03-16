@@ -43,13 +43,13 @@ public class CarParkControllerServlet extends HttpServlet {
                 case "ADD":
                     addReservation(request, response);
 
+                case "DELETE":
+                    deleteReservation(request, response);
+
            /*   TODO: Add these functions
 
                 case "LOAD":
                     loadReservation(request, response);
-
-                case "DELETE":
-                    deleteReservation(request, response);
 
                 case "UPDATE":
                     updateReservation(request, response); */
@@ -65,6 +65,8 @@ public class CarParkControllerServlet extends HttpServlet {
 
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        /*HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");*/
         ReservationDao reservationDao = new ReservationDao();
         List<Reservation> reservations = reservationDao.getReservations();
         request.setAttribute("reservation_list", reservations);
@@ -111,6 +113,23 @@ public class CarParkControllerServlet extends HttpServlet {
 
     }
 
+    private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        /*Getting the values
+        Maybe future use?
+        HttpSession session = request.getSession();
+        User currentUser = (User) session.getAttribute("user");*/
+        String reservationId = request.getParameter("reservationId");
+
+        //Creating the DAO
+        ReservationDao reservationDao = new ReservationDao();
+
+        reservationDao.delete(reservationId);
+
+        listReservation(request, response);
+
+    }
+
 
 }
 
@@ -118,11 +137,7 @@ public class CarParkControllerServlet extends HttpServlet {
     private void updateReservation(HttpServletRequest request, HttpServletResponse response) {
     }
 
-    private void deleteReservation(HttpServletRequest request, HttpServletResponse response) {
 
-        HttpSession session = request.getSession();
-
-    }
 
 
     private void loadReservation(HttpServletRequest request, HttpServletResponse response) {
