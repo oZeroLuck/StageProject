@@ -61,7 +61,8 @@ public class ReservationDao {
             //Delete it
             session.delete(reservation);
             transaction.commit();
-            System.out.println("Deleted");
+            //Testing
+            //System.out.println("Deleted");
 
         } catch (Exception e) {
             if (transaction!=null) transaction.rollback();
