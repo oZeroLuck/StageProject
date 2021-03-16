@@ -54,6 +54,7 @@
                     <th><fmt:message key="label.reservation" /></th>
                     <th><fmt:message key="label.carType" /></th>
                     <th><fmt:message key="label.startDate" /></th>
+                    <th><fmt:message key="label.duration" /></th>
                     <th><fmt:message key="label.action" /></th>
                 </tr>
 
@@ -77,6 +78,7 @@
                         <td>${tempReservation.id}</td>
                         <td>${tempReservation.theVehicle.type}</td>
                         <td>${tempReservation.startDate}</td>
+                        <td>${tempReservation.duration}</td>
                         <td><a href ="${changeLink}">Update</a>
                              | <!-- Setting a confirmation message -->
                         <a href ="${deleteLink}"

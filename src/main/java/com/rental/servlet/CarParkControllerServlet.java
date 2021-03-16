@@ -45,13 +45,11 @@ public class CarParkControllerServlet extends HttpServlet {
                 case "DELETE":
                     deleteReservation(request, response);
 
-           /*   TODO: Add these functions
+                case "UPDATE":
+                    updateReservation(request, response);
 
                 case "LOAD":
                     loadReservation(request, response);
-
-                case "UPDATE":
-                    updateReservation(request, response); */
 
                 default:
                     listReservation(request, response);
@@ -65,12 +63,13 @@ public class CarParkControllerServlet extends HttpServlet {
     //TODO: Fix the listing to only list the logged customer's reservations
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        /*HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");*/
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         ReservationDao reservationDao = new ReservationDao();
-        List<Reservation> reservations = reservationDao.getReservations();
-        request.setAttribute("reservation_list", reservations);
+        System.out.println(user.getUserId());
+        List<Reservation> reservations = reservationDao.getReservations(user.getUserId());
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
+        request.setAttribute("command", "LIST");
         dispatcher.forward(request, response);
 
     }
@@ -93,23 +92,24 @@ public class CarParkControllerServlet extends HttpServlet {
         User currentUser =(User) session.getAttribute("user");
 
         //Get vehicle id
-        String vehicleId = request.getParameter("vehicleId");
+        String vehicleId = request.getParameter("selected");
 
         //Set date
         Date currentDate = new Date();
+        String startDate = currentDate.toString();
+        String duration = request.getParameter("duration");
 
         //Get vehicle from id
         VehicleDao vehicleDao = new VehicleDao();
         Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
 
-        String startDate = currentDate.toString();
 
-        Reservation theReservation = new Reservation(theVehicle, startDate, currentUser);
+        Reservation theReservation = new Reservation(theVehicle, startDate, duration, currentUser);
         ReservationDao theReservationDao = new ReservationDao();
 
         theReservationDao.saveReservation(theReservation);
 
-        listReservation(request, response);
+        response.sendRedirect("CarParkControllerServlet");
 
     }
 
@@ -130,15 +130,42 @@ public class CarParkControllerServlet extends HttpServlet {
 
     }
 
+    private void loadReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
+        //Get the reservation id
+        String reservationId = request.getParameter("reservationId");
+
+        //Getting the reservation
+        ReservationDao reservationDao = new ReservationDao();
+        Reservation theReservation = reservationDao.getTheReservation(reservationId);
+
+        //Place the reservation in request attribute
+        request.setAttribute("theReservation", theReservation);
+
+        //Send to jsp page
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("update_reservation.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void updateReservation(HttpServletRequest request, HttpServletResponse response) {
+
+        //Read the reservation id
+        String reservationId = request.getParameter("reservationId");
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
 }
 
 /*
-    private void updateReservation(HttpServletRequest request, HttpServletResponse response) {
-    }
 
 
 
 
-    private void loadReservation(HttpServletRequest request, HttpServletResponse response) {
-    } */
+
+ */
