@@ -2,7 +2,7 @@ package com.rental.dao;
 
 import java.util.List;
 
-import com.rental.entity.User;
+//import com.rental.entity.User;
 import com.rental.util.HibernateUtil;
 import com.rental.entity.Reservation;
 import org.hibernate.HibernateException;
@@ -29,13 +29,15 @@ public class ReservationDao {
         }
     }
 
-    public List<Reservation> getReservations(){
+    public List<Reservation> getReservations(int userId){
+        System.out.println("userId :" + userId);
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Reservation", Reservation.class).list();
+            return session.createQuery("from Reservation as R where R.theCustomer.id = "
+                    + userId, Reservation.class).list();
         }
     }
 
-    public Reservation getTheReservation(String reservationId) throws Exception {
+    public Reservation getTheReservation(String reservationId){
 
         //Converting Id from String to Int
         int toInt = Integer.parseInt(reservationId);
