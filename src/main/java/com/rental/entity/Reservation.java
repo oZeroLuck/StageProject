@@ -18,7 +18,7 @@ public class Reservation {
     private String startDate;
 
     @Column
-    private String duration;
+    private String endDate;
 
     @ManyToOne
     @JoinColumn(name="customer_id", nullable = false)
@@ -28,10 +28,10 @@ public class Reservation {
 
     }
 
-    public Reservation(Vehicle theVehicle, String startDate, String duration, User theCustomer) {
+    public Reservation(Vehicle theVehicle, String startDate, String endDate, User theCustomer) {
         this.theVehicle = theVehicle;
         this.startDate = startDate;
-        this.duration = duration;
+        this.endDate = endDate;
         this.theCustomer = theCustomer;
     }
 
@@ -67,11 +67,11 @@ public class Reservation {
         this.theCustomer = theCustomer;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
