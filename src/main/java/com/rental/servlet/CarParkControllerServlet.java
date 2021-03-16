@@ -10,7 +10,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "CarParkControllerServlet", value = "/CarParkControllerServlet")
@@ -127,7 +126,7 @@ public class CarParkControllerServlet extends HttpServlet {
     }
 
     // Post methods
-
+    //TODO: Check the dates!
     private void addReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         //Get user from session
@@ -138,16 +137,15 @@ public class CarParkControllerServlet extends HttpServlet {
         String vehicleId = request.getParameter("selected");
 
         //Set date
-        Date currentDate = new Date();
-        String startDate = currentDate.toString();
-        String duration = request.getParameter("duration");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
 
         //Get vehicle from id
         VehicleDao vehicleDao = new VehicleDao();
         Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
 
 
-        Reservation theReservation = new Reservation(theVehicle, startDate, duration, currentUser);
+        Reservation theReservation = new Reservation(theVehicle, startDate, endDate, currentUser);
         ReservationDao theReservationDao = new ReservationDao();
 
         theReservationDao.saveReservation(theReservation);
@@ -172,13 +170,23 @@ public class CarParkControllerServlet extends HttpServlet {
         response.sendRedirect("CarParkControllerServlet");
 
     }
+    //TODO: Check the dates!
+    private void updateReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
-
-    //TODO: Implement update function
-    private void updateReservation(HttpServletRequest request, HttpServletResponse response) {
-
-        //Read the reservation id
+        // Getting the values
         String reservationId = request.getParameter("reservationId");
+        String newStartDate = request.getParameter("newStartDate");
+        String newEndDate = request.getParameter("newEndDate");
+
+        // Get the reservation
+        ReservationDao reservationDao = new ReservationDao();
+        Reservation updatedReservation = reservationDao.getTheReservation(reservationId);
+
+        // Update it
+        reservationDao.updateReservation(updatedReservation, newStartDate, newEndDate);
+
+        // Redirect
+        response.sendRedirect("CarParkControllerServlet");
 
     }
 }

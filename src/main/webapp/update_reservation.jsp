@@ -30,16 +30,22 @@
 
         <h1><fmt:message key="label.update"/></h1>
 
-        <form action="CarParkControllerServlet" method="GET">
+        <form action="CarParkControllerServlet" method="POST">
+
+            <input type="hidden" name="reservationId" value="${theReservation.id}">
 
             <input type="hidden" name="command" value="UPDATE">
 
-            <table>
-                <tr>
-                    <td></td>
-                </tr>
-            </table>
+            <fmt:message key="label.update" /> <fmt:message key="label.startDate"/> :
+                <input type="date" name="newStartDate"
+                    value="${theReservation.startDate}"
+                    min="<fmt:formatDate value="${now}" pattern="yyyy-mm-dd" />" max="2099-12-31">
+            <fmt:message key="label.endDate"/> :
+                <input type="date" name="newEndDate"
+                    value="${theReservation.endDate}"
+                    min="<fmt:formatDate value="${now}" pattern="yyyy-mm-dd" />" max="2099-12-31">
 
+            <input type="submit" name="<fmt:message key="label.update"/>">
         </form>
 
 </body>

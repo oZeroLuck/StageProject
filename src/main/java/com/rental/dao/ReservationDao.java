@@ -73,4 +73,32 @@ public class ReservationDao {
 
     }
 
+    public void updateReservation(Reservation updatedReservation, String newStartDate, String newEndDate) {
+
+        // Get session and transaction
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try  {
+            // Start transaction
+            transaction = session.beginTransaction();
+
+            // Update the info
+            updatedReservation.setStartDate(newStartDate);
+            updatedReservation.setEndDate(newEndDate);
+
+            session.update(updatedReservation);
+
+            // Commit
+            transaction.commit();
+
+        } catch (HibernateException e) {
+            if (transaction!=null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            //Close connection
+            session.close();
+        }
+
+    }
 }
