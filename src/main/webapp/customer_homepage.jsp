@@ -39,8 +39,7 @@
     </c:url>
 
     <input type="button" value="<fmt:message key="label.addReservation" />"
-            onclick="window.location.href='${addLink}'; return false;"
-            class="add_student_button" />
+            onclick="window.location.href='${addLink}'; return false;" />
 
     <br/><br/>
 
@@ -60,30 +59,23 @@
 
                 <c:forEach var="tempReservation" items="${reservation_list}">
 
-                    <!-- Setting up links for every reservation -->
-                    <c:url var="changeLink" value="CarParkControllerServlet">
-                        <c:param name="command" value="LOAD" />
-                        <c:param name="reservationId" value="${tempReservation.id}"/>
-                    </c:url>
-
-                    <!-- Setting up temporary delete links for every reservation -->
-                    <c:url var="deleteLink" value="CarParkControllerServlet">
-                        <c:param name="command" value="DELETE" />
-                        <c:param name="reservationId" value="${tempReservation.id}"/>
-                    </c:url>
-
-
-
                     <tr>
                         <td>${tempReservation.id}</td>
                         <td>${tempReservation.theVehicle.type}</td>
                         <td>${tempReservation.startDate}</td>
                         <td>${tempReservation.duration}</td>
-                        <td><a href ="${changeLink}">Update</a>
-                             | <!-- Setting a confirmation message -->
-                        <a href ="${deleteLink}"
-                           onclick="if(!(confirm('Are you sure you want to delete this reservation?'))) return false">
-                                Delete</a> </td>
+                        <td>
+                            <form action="CarParkControllerServlet" method="post">
+                                <input type="hidden" name="command" value="LOAD" />
+                                <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
+                                <input type="submit" value="<fmt:message key="label.update"/>"/>
+                            </form>
+                            <form id="theForm" action="CarParkControllerServlet" method="post">
+                                <input type="hidden" name="command" value="DELETE" />
+                                <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
+                                <input type="submit" value="<fmt:message key="label.delete"/>"/>
+                            </form>
+                        </td>
                      </tr>
 
                 </c:forEach>
@@ -96,3 +88,17 @@
 
 </body>
 </html>
+<!-- Temp Code saving space
+
+<td><a href ="${changeLink}">Update</a>
+
+
+<form action="CarParkControllerServlet" method="post">
+    <input type="hidden" name="command" value="DELETE">
+
+    <a href ="${deleteLink}"
+       onclick="if(!(confirm('Are you sure you want to delete this reservation?'))) return false">
+        Delete</a>
+</form>
+
+-->
