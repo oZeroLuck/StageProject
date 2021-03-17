@@ -73,7 +73,7 @@
                 min="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" max="2099-12-31">
     <br/><br/>
 
-    <input type="submit" value="<fmt:message key="label.add"/>">
+    <input type="submit" value="<fmt:message key="label.addReservation"/>">
 
 </form>
 

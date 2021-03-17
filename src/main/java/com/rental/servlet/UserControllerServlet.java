@@ -3,13 +3,16 @@ package com.rental.servlet;
 import com.rental.dao.UserDao;
 import com.rental.entity.User;
 import org.hibernate.HibernateException;
+import sun.rmi.server.Dispatcher;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @WebServlet(name = "UserControllerServlet", value = "/UserControllerServlet")
 public class UserControllerServlet extends HttpServlet {
@@ -20,16 +23,27 @@ public class UserControllerServlet extends HttpServlet {
             // Getting the command from the request
             String commandId = request.getParameter("command");
 
+            if(commandId == null)
+                commandId = "LIST";
+
             // Dispatch
             switch (commandId) {
-                case "REG":
-                    userRegister(request, response);
+
+                case "LOGIN":
+                    login(request, response);
+                    break;
 
                 case "LOGOUT":
                     logout(request, response);
+                    break;
+
+                case "LOAD":
+                    loadCustomer(request, response);
+                    break;
 
                 default:
-                    errorPage(request, response, commandId);
+                    listCustomer(request, response);
+                    break;
             }
 
 
@@ -38,16 +52,15 @@ public class UserControllerServlet extends HttpServlet {
         }
     }
 
+    //Get Methods
 
-    //TODO: Check for user type
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void login(HttpServletRequest request, HttpServletResponse response) {
 
         String email= request.getParameter("username");
         String password = request.getParameter("userpassword");
 
         //Test
-        System.out.println(email + " " + password);
+        //System.out.println(email + " " + password);
 
         UserDao userDao = new UserDao();
 
@@ -59,28 +72,43 @@ public class UserControllerServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", theUser);
                 session.setAttribute("command", "LIST");
-                destination = "CarParkControllerServlet";
+                if (theUser.isAdmin())
+                    destination = "UserControllerServlet";
+                else
+                    destination = "CarParkControllerServlet";
             } else {
+                response.setContentType("text/html");
                 String message = "Invalid user/pass";
-                request.setAttribute("message", message);
+                PrintWriter out = response.getWriter();
+                out.print(message);
             }
 
             response.sendRedirect(destination);
         } catch (Exception e)  {
-            throw new ServletException(e);
+            e.printStackTrace();
         }
-
 
     }
 
-    //Methods
+    private void loadCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-    private void listUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String customerId = request.getParameter("customerID");
 
         UserDao userDao = new UserDao();
-        List<User> users = userDao.getCustomers();
-        request.setAttribute("users", users);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+        User customer = userDao.getCustomer(customerId);
+
+        request.setAttribute("theCustomer", customer);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("update_customer.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void listCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        UserDao userDao = new UserDao();
+        List<User> customers = userDao.getCustomers();
+        request.setAttribute("customerList", customers);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin_homepage.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -100,22 +128,7 @@ public class UserControllerServlet extends HttpServlet {
 
     }
 
-    private void userRegister (HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        User newUser = new User(firstName, lastName, email, password, false, null);
-        UserDao newUserDao = new UserDao();
-
-        newUserDao.saveCustomer(newUser);
-
-        listUsers(request, response);
-
-    }
-
+    /*
     private void errorPage(HttpServletRequest request, HttpServletResponse response, String commandId) throws ServletException, IOException{
 
         response.setContentType("text/html");
@@ -125,6 +138,97 @@ public class UserControllerServlet extends HttpServlet {
         out.print("<html><body>");
         out.print(commandId);
         out.print("</body></html>");
+
+    }*/
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String commandId = request.getParameter("command");
+
+        if (commandId == null)
+            commandId = "ERROR";
+
+        try {
+            switch (commandId) {
+                case "REG":
+                    customerRegister(request, response);
+                    break;
+
+                case "DELETE":
+                    deleteCustomer(request, response);
+                    break;
+
+                case "UPDATE":
+                    updateCustomer(request, response);
+                    break;
+
+                default:
+                    errorMessage(request, response);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        UserDao userDao = new UserDao();
+        User upCustomer = userDao.getCustomer(request.getParameter("customerId"));
+
+        userDao.updateCustomer(upCustomer, firstName, lastName, username, email, password);
+
+        response.sendRedirect("UserControllerServlet");
+
+    }
+
+    private void customerRegister (HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        User newUser = new User(firstName, lastName, email, username, password, false, null);
+        UserDao newUserDao = new UserDao();
+
+        newUserDao.saveCustomer(newUser);
+
+        response.sendRedirect("UserControllerServlet");
+
+    }
+
+    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        String customerId = request.getParameter("customerID");
+
+        UserDao userDao = new UserDao();
+
+        userDao.deleteCustomer(customerId);
+
+        response.sendRedirect("UserControllerServlet");
+
+    }
+
+    private void errorMessage(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        request.getRequestDispatcher("login.jsp").include(request, response);
+
+        out.print("Error");
+
+        out.close();
 
     }
 

@@ -19,16 +19,20 @@
 
 <h1>Login</h1>
 
-<form action="UserControllerServlet" method="post">
+<form action="UserControllerServlet" method="GET">
+
+    <input type="hidden" name="command" value="LOGIN">
 
     Name:<input type="text" name="username"><br/><br/>
-    Password:<input type="text" name="userpassword"><br/><br/>
+    Password:<input type="password" name="userpassword"><br/><br/>
 
     <input type="submit" name="Login"> | <a href="customer_registration.jsp"><fmt:message key="label.registerNow"/></a>
 
 </form>
 
 <hr>
+
+${message}
 
 <!-- Testing
 <table>

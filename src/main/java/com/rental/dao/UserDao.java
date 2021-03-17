@@ -1,11 +1,13 @@
 package com.rental.dao;
 
+import com.rental.entity.Reservation;
 import com.rental.entity.User;
 import com.rental.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class UserDao {
@@ -30,7 +32,8 @@ public class UserDao {
 
     public List<User> getCustomers() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM User", User.class).list();
+            return session.createQuery("FROM User as U WHERE U.isAdmin = false", User.class).list();
+            //
         }
     }
 
@@ -38,10 +41,11 @@ public class UserDao {
 
         Transaction transaction = null;
         User user = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User U WHERE U.email = :email").setParameter("email", email).uniqueResult();
+            user = (User) session.createQuery("FROM User U WHERE U.username = :username").setParameter("username", email).uniqueResult();
 
             //Testing
             //System.out.println(user.getEmail() + " " + user.getPassword() );
@@ -59,6 +63,8 @@ public class UserDao {
             if (transaction !=null)
                 transaction.rollback();
             e.printStackTrace();
+        } finally {
+            session.close();
         }
 
         //Testing
@@ -76,4 +82,67 @@ public class UserDao {
         }
         return null; */
     }
+
+    public User getCustomer(String customerId) {
+
+        int toInt = Integer.parseInt(customerId);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.get(User.class, toInt);
+
+    }
+
+    public void deleteCustomer(String customerId) {
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            User customer = getCustomer(customerId);
+
+            session.delete(customer);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if(transaction!=null)
+                transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateCustomer(User customer, String firstName, String lastName, String email, String username, String password) {
+
+        // Get session and transaction
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try  {
+            // Start transaction
+            transaction = session.beginTransaction();
+
+            // Set the info
+            customer.setFirstName(firstName);
+            customer.setLastName(lastName);
+            customer.setEmail(email);
+            customer.setUsername(username);
+            customer.setPassword(password);
+
+            // Update the entity
+            session.merge(customer);
+
+            // Commit
+            transaction.commit();
+
+        } catch (HibernateException e) {
+            if (transaction!=null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            //Close connection
+            session.close();
+        }
+
+    }
+
 }

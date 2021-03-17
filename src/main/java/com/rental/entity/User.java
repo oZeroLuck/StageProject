@@ -22,6 +22,9 @@ public class User {
     private String email;
 
     @Column
+    private String username;
+
+    @Column
     private String password;
 
     @OneToMany(mappedBy = "theCustomer")
@@ -32,6 +35,14 @@ public class User {
 
     public User() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -50,13 +61,12 @@ public class User {
         this.password = password;
     }
 
-    public User(String firstName, String lastName, String email, String password, boolean isAdmin, List<Reservation> reservations) {
+    public User(String firstName, String lastName, String email,String username, String password, boolean isAdmin, List<Reservation> reservations) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-       // this.idType = idType;
+        this.username = username;
         this.password = password;
-       // this.idNumber = idNumber;
         this.isAdmin = isAdmin;
         this.reservations = reservations;
     }
@@ -77,21 +87,13 @@ public class User {
         isAdmin = admin;
     }
 
-  /*  public String getIdType() {
-        return idType;
+    public String getUsername() {
+        return username;
     }
 
-    public void setIdType(String idType) {
-        this.idType = idType;
+    public void setUsername(String username) {
+        this.username = username;
     }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    } */
 
     public boolean getIsAdmin() {
         return isAdmin;
