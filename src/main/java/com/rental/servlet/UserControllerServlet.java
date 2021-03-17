@@ -2,17 +2,13 @@ package com.rental.servlet;
 
 import com.rental.dao.UserDao;
 import com.rental.entity.User;
-import org.hibernate.HibernateException;
-import sun.rmi.server.Dispatcher;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @WebServlet(name = "UserControllerServlet", value = "/UserControllerServlet")
 public class UserControllerServlet extends HttpServlet {
@@ -188,7 +184,7 @@ public class UserControllerServlet extends HttpServlet {
         UserDao userDao = new UserDao();
         User upCustomer = userDao.getCustomer(request.getParameter("customerId"));
 
-        userDao.updateCustomer(upCustomer, firstName, lastName, username, email, password);
+        userDao.updateCustomer(upCustomer, firstName, lastName, email, username, password);
 
         response.sendRedirect("UserControllerServlet");
 

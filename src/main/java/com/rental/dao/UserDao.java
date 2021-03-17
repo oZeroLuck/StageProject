@@ -1,13 +1,11 @@
 package com.rental.dao;
 
-import com.rental.entity.Reservation;
 import com.rental.entity.User;
 import com.rental.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class UserDao {
@@ -33,7 +31,7 @@ public class UserDao {
     public List<User> getCustomers() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM User as U WHERE U.isAdmin = false", User.class).list();
-            //
+
         }
     }
 
