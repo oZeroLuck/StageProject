@@ -1,4 +1,3 @@
-//TODO: Change the correlation between vehicle and reservation
 package com.rental.entity;
 
 import javax.persistence.*;
@@ -24,6 +23,10 @@ public class Vehicle {
     @Column
     private String brand;
 
+    // Until I find a way to query it
+    @Column
+    private boolean hasReservation;
+
     @OneToOne(mappedBy = "theVehicle", cascade = CascadeType.ALL)
     private Reservation reservation;
 
@@ -41,6 +44,7 @@ public class Vehicle {
         this.licencePlate = licencePlate;
         this.model = model;
         this.brand = brand;
+        this.hasReservation = false;
     }
 
     public Vehicle() {
@@ -87,4 +91,11 @@ public class Vehicle {
         this.id = id;
     }
 
+    public boolean isHasReservation() {
+        return hasReservation;
+    }
+
+    public void setHasReservation(boolean hasReservation) {
+        this.hasReservation = hasReservation;
+    }
 }

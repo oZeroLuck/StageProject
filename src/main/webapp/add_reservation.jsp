@@ -19,7 +19,7 @@
 
 <div id="wrapper">
     <div id="header">
-        <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
+        <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
         |
         <c:url var="parkLink" value="CarParkControllerServlet">
             <c:param name="command" value="CAR_PARK"/>
@@ -67,13 +67,13 @@
 
     <fmt:message key="label.startDate"/> :
         <input type="date" id="start" name="startDate"
-                value="<fmt:formatDate value="${now}" pattern="yyyyy-MM-dd" />"
-                min="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" max="2099-12-31">
+                value="<fmt:formatDate value="${now}" pattern="dd-mm-yyyy" />"
+                min="<fmt:formatDate value="${now}" pattern="dd-mm-yyyy" />" max="2099-12-31">
      |
     <fmt:message key="label.endDate" />:
         <input type="date" id="end" name="endDate"
-                value="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />"
-                min="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" max="2099-12-31">
+                value="<fmt:formatDate value="${now}" pattern="dd-mm-yyyy" />"
+                min="<fmt:formatDate value="${now}" pattern="dd-mm-yyyy" />" max="2099-12-31">
     <br/><br/>
 
     <input type="submit" value="<fmt:message key="label.addReservation"/>">
