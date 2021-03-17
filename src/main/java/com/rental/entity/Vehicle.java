@@ -24,8 +24,7 @@ public class Vehicle {
     @Column
     private String manufacturer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="reservation_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "theVehicle")
     private Reservation reservation;
 
     public Reservation getReservation() {
