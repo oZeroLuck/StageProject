@@ -37,7 +37,7 @@ public class UserDao {
         }
     }
 
-    public User checkLogin(String email, String password) throws Exception {
+    public User checkLogin(String username, String password) throws Exception {
 
         Transaction transaction = null;
         User user = null;
@@ -45,7 +45,7 @@ public class UserDao {
 
         try {
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User U WHERE U.username = :username").setParameter("username", email).uniqueResult();
+            user = (User) session.createQuery("FROM User U WHERE U.username = :username").setParameter("username", username).uniqueResult();
 
             //Testing
             //System.out.println(user.getEmail() + " " + user.getPassword() );

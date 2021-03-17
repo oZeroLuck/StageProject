@@ -61,13 +61,13 @@ public class User {
         this.password = password;
     }
 
-    public User(String firstName, String lastName, String email,String username, String password, boolean isAdmin, List<Reservation> reservations) {
+    public User(String firstName, String lastName, String email,String username, String password,List<Reservation> reservations) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
+        this.isAdmin = false;
         this.reservations = reservations;
     }
 

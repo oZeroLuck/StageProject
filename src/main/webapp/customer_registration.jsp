@@ -43,15 +43,6 @@
             <td><label><fmt:message key="label.lastName" /> :</label></td>
             <td><label><input type="text" name="lastName" /></label></td>
         </tr>
-<!--      Placeholder
-        <tr>
-            <td><label><fmt:message key="label.idType" /> :</label></td>
-            <td><label><input type="text" name="idType" /></label></td>
-        </tr>
-        <tr>
-            <td><label><fmt:message key="label.idNumber" /> :</label></td>
-            <td><label><input type="text" name="idNumber" /></label></td>
-        </tr> -->
         <tr>
             <td><label>E-mail :</label></td>
             <td><label><input type="text" name="email" /></label></td>

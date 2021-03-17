@@ -26,7 +26,7 @@
     Name:<input type="text" name="username"><br/><br/>
     Password:<input type="password" name="userpassword"><br/><br/>
 
-    <input type="submit" name="Login"> | <a href="customer_registration.jsp"><fmt:message key="label.registerNow"/></a>
+    <input type="submit" name="Login">
 
 </form>
 

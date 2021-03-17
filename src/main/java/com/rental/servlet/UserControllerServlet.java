@@ -56,7 +56,7 @@ public class UserControllerServlet extends HttpServlet {
 
     protected void login(HttpServletRequest request, HttpServletResponse response) {
 
-        String email= request.getParameter("username");
+        String username= request.getParameter("username");
         String password = request.getParameter("userpassword");
 
         //Test
@@ -65,7 +65,7 @@ public class UserControllerServlet extends HttpServlet {
         UserDao userDao = new UserDao();
 
         try {
-            User theUser = userDao.checkLogin(email, password);
+            User theUser = userDao.checkLogin(username, password);
             String destination = "login.jsp";
 
             if (theUser != null) {
@@ -82,6 +82,8 @@ public class UserControllerServlet extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 out.print(message);
             }
+
+            System.out.println(destination);
 
             response.sendRedirect(destination);
         } catch (Exception e)  {
@@ -140,7 +142,7 @@ public class UserControllerServlet extends HttpServlet {
         out.print("</body></html>");
 
     }*/
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -198,7 +200,7 @@ public class UserControllerServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        User newUser = new User(firstName, lastName, email, username, password, false, null);
+        User newUser = new User(firstName, lastName, email, username, password, null);
         UserDao newUserDao = new UserDao();
 
         newUserDao.saveCustomer(newUser);
@@ -209,7 +211,7 @@ public class UserControllerServlet extends HttpServlet {
 
     private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
-        String customerId = request.getParameter("customerID");
+        String customerId = request.getParameter("customerId");
 
         UserDao userDao = new UserDao();
 

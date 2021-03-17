@@ -11,7 +11,8 @@ public class Reservation {
     @Column(name = "id")
     private int id;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne
+    @JoinColumn(name="vehicle_id", referencedColumnName = "id")
     private Vehicle theVehicle;
 
     @Column
@@ -19,6 +20,9 @@ public class Reservation {
 
     @Column
     private String endDate;
+
+    @Column
+    private String approved;
 
     @ManyToOne
     @JoinColumn(name="customer_id", nullable = false)
@@ -32,8 +36,13 @@ public class Reservation {
         this.theVehicle = theVehicle;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.approved = null;
         this.theCustomer = theCustomer;
     }
+
+    public String getApproved() {return approved; }
+
+    public void setApproved(String approved) {this.approved = approved; }
 
     public String getStartDate() {
         return startDate;

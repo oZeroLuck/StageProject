@@ -58,11 +58,20 @@ public class CarParkControllerServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         ReservationDao reservationDao = new ReservationDao();
-        List<Reservation> reservations = reservationDao.getReservations(user.getUserId());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
-        request.setAttribute("reservation_list", reservations);
-        dispatcher.forward(request, response);
 
+        // Branch between admin and customer types
+        if (user.isAdmin()) {
+            int customerId = Integer.parseInt(request.getParameter("customerId"));
+            List<Reservation> reservations = reservationDao.getReservations(customerId);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("customer_reservations.jsp");
+            request.setAttribute("reservation_list", reservations);
+            dispatcher.forward(request, response);
+        } else {
+            List<Reservation> reservations = reservationDao.getReservations(user.getUserId());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
+            request.setAttribute("reservation_list", reservations);
+            dispatcher.forward(request, response);
+        }
     }
 
     private void loadVehicles(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -112,6 +121,10 @@ public class CarParkControllerServlet extends HttpServlet {
 
                 case "UPDATE":
                     updateReservation(request, response);
+                    break;
+
+                case "DECIDE":
+                    approveReservation(request, response);
                     break;
 
                 default:
@@ -189,6 +202,18 @@ public class CarParkControllerServlet extends HttpServlet {
         response.sendRedirect("CarParkControllerServlet");
 
     }
+
+    private void approveReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        // Get reservation
+        ReservationDao reservationDao = new ReservationDao();
+        Reservation reservation = reservationDao.getTheReservation(request.getParameter("reservationId"));
+
+        reservationDao.approveReservation(reservation, request.getParameter("verdict"));
+
+        response.sendRedirect("UserControllerServlet");
+    }
+
 }
 
 /*

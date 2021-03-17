@@ -101,4 +101,31 @@ public class ReservationDao {
         }
 
     }
+
+    public void approveReservation(Reservation reservation ,String verdict) {
+
+        // Get session and transaction
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try  {
+            // Start transaction
+            transaction = session.beginTransaction();
+
+            // Update the info
+            reservation.setApproved(verdict);
+            session.merge(reservation);
+
+            // Commit
+            transaction.commit();
+
+        } catch (HibernateException e) {
+            if (transaction!=null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            //Close connection
+            session.close();
+        }
+
+    }
 }
