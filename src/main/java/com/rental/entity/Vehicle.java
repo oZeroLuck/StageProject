@@ -22,9 +22,9 @@ public class Vehicle {
     private String model;
 
     @Column
-    private String manufacturer;
+    private String brand;
 
-    @OneToOne(mappedBy = "theVehicle")
+    @OneToOne(mappedBy = "theVehicle", cascade = CascadeType.ALL)
     private Reservation reservation;
 
     public Reservation getReservation() {
@@ -36,11 +36,11 @@ public class Vehicle {
     }
 
 
-    public Vehicle(String type, String licencePlate, String model, String manufacturer) {
+    public Vehicle(String type, String licencePlate, String model, String brand) {
         this.type = type;
         this.licencePlate = licencePlate;
         this.model = model;
-        this.manufacturer = manufacturer;
+        this.brand = brand;
     }
 
     public Vehicle() {
@@ -71,12 +71,12 @@ public class Vehicle {
         this.model = model;
     }
 
-    public String getManufacturer() {
-        return manufacturer;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public int getId() {
@@ -86,4 +86,5 @@ public class Vehicle {
     public void setId(int id) {
         this.id = id;
     }
+
 }
