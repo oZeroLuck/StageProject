@@ -22,7 +22,7 @@
                 <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
             </c:when>
             <c:otherwise>
-                <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+                <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
             </c:otherwise>
         </c:choose>
         |

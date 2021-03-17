@@ -17,7 +17,7 @@
 
     <div id="wrapper">
         <div id="header">
-            <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+            <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
              |
             <c:url var="parkLink" value="CarParkControllerServlet">
                 <c:param name="command" value="CAR_PARK"/>
@@ -79,7 +79,7 @@
                         </td>
                         <td>
                             <form action="CarParkControllerServlet" method="GET">
-                                <input type="hidden" name="command" value="LOAD" />
+                                <input type="hidden" name="command" value="LOAD_R" />
                                 <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
                                 <input type="submit" value="<fmt:message key="label.update"/>"/>
                             </form>

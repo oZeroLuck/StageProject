@@ -18,7 +18,7 @@
 <body>
 <div id="wrapper">
     <div id="header">
-        <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+        <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
         |
         <c:url var="parkLink" value="CarParkControllerServlet">
             <c:param name="command" value="CAR_PARK"/>
@@ -35,7 +35,7 @@
     <table>
     <input type="hidden" name="customerId" value="${theCustomer.id}">
     <input type="hidden" name="command" value="UPDATE">
-    <tr>
+        <tr>
             <th><label><fmt:message key="label.name" /> :</label></th>
             <td><label><input type="text" name="firstName" value="${theCustomer.firstName}"/></label></td>
         </tr>
@@ -48,8 +48,8 @@
             <td><label><input type="text" name="email" value="${theCustomer.email}"/></label></td>
         </tr>
         <tr>
-            <th><label>E-mail :</label></th>
-            <td><label><input type="text" name="username" value="${theCustomer.email}"/></label></td>
+            <th><label>Username :</label></th>
+            <td><label><input type="text" name="username" value="${theCustomer.username}"/></label></td>
         </tr>
         <tr>
             <th><label>Password :</label></th>

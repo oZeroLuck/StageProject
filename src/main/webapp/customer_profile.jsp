@@ -19,7 +19,7 @@
 
 <div id="wrapper">
     <div id="header">
-        <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+        <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
         |
         <c:url var="parkLink" value="CarParkControllerServlet">
             <c:param name="command" value="CAR_PARK"/>

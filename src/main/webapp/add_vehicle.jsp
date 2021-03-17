@@ -61,8 +61,6 @@
 
     <hr>
 
-    <a href="login.jsp"><fmt:message key="label.back"/></a>
-
 </form>
 
 </body>
