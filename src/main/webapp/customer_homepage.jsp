@@ -19,7 +19,7 @@
         <div id="header">
             <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
              |
-            <c:url var="parkLink" value="PageControllerServlet">
+            <c:url var="parkLink" value="CarParkControllerServlet">
                 <c:param name="command" value="CAR_PARK"/>
             </c:url>
             <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
@@ -37,7 +37,7 @@
     <br/>
 
     <c:url var="addLink" value="CarParkControllerServlet">
-        <c:param name ="command" value="LOAD_CARS" />
+        <c:param name ="command" value="LOAD_VS" />
     </c:url>
 
     <input type="button" value="<fmt:message key="label.addReservation" />"

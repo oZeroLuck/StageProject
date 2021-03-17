@@ -18,9 +18,12 @@
 <!-- Header -->
 <div id="wrapper">
     <div id="header">
-        <a href="customer_homepage.jsp"><fmt:message key="label.homepage" /></a>
+        <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
         |
-        <a href="customer_car_park.jsp"><fmt:message key="label.carPark" /></a>
+        <c:url var="parkLink" value="CarParkControllerServlet">
+            <c:param name="command" value="CAR_PARK"/>
+        </c:url>
+        <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
         |
         <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
     </div>
@@ -33,7 +36,7 @@
 <hr>
 
 <input type="button" value="<fmt:message key="label.addCustomer"/>"
-       onclick="window.location.href='customer_registration.jsp'; return false;"/>
+       onclick="window.location.href='add_customer.jsp'; return false;"/>
 
 <br/><br/>
 
@@ -42,6 +45,7 @@
         <th><fmt:message key="label.name"/></th>
         <th><fmt:message key="label.lastName"/></th>
         <th>E-mail</th>
+        <th>Username</th>
         <th><fmt:message key="label.action"/></th>
     </tr>
 
