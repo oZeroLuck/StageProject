@@ -86,6 +86,7 @@ public class UserControllerServlet extends HttpServlet {
             System.out.println(destination);
 
             response.sendRedirect(destination);
+
         } catch (Exception e)  {
             e.printStackTrace();
         }
@@ -112,6 +113,7 @@ public class UserControllerServlet extends HttpServlet {
         request.setAttribute("customerList", customers);
         RequestDispatcher dispatcher = request.getRequestDispatcher("admin_homepage.jsp");
         dispatcher.forward(request, response);
+
     }
 
     protected void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {

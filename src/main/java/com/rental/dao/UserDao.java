@@ -47,15 +47,8 @@ public class UserDao {
             transaction = session.beginTransaction();
             user = (User) session.createQuery("FROM User U WHERE U.username = :username").setParameter("username", username).uniqueResult();
 
-            //Testing
-            //System.out.println(user.getEmail() + " " + user.getPassword() );
-
-
-            if (user != null && user.getPassword().equals(password)) {
-                //Testing
-                //System.out.println("Trovato!");
+            if (user != null && user.getPassword().equals(password))
                 return user;
-            }
 
             transaction.commit();
 
@@ -67,20 +60,8 @@ public class UserDao {
             session.close();
         }
 
-        //Testing
-        //System.out.println("Non trovato :(");
         return null;
-       /* Session session = HibernateUtil.getSessionFactory().openSession();
-        if (session != null) {
-            try {
-                User user = (User) session.get(User.class, email);
-                if (password.equals(user.getPassword()))
-                    return user;
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return null; */
+
     }
 
     public User getCustomer(String customerId) {

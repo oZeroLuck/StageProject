@@ -32,12 +32,20 @@ public class CarParkControllerServlet extends HttpServlet {
 
             // Sorting out the actions
             switch (commandId) {
-                case "LOAD_CARS":
-                    loadVehicles(request, response);
+                case "LOAD_VS":
+                    listVehicles(request, response);
                     break;
 
-                case "LOAD":
+                case "LOAD_R":
                     loadReservation(request, response);
+                    break;
+
+                case "CAR_PARK":
+                    carPark(request, response);
+                    break;
+
+                case "LOAD_V":
+                    loadVehicle(request, response);
                     break;
 
                 // Default to listing
@@ -79,7 +87,41 @@ public class CarParkControllerServlet extends HttpServlet {
         VehicleDao vehicleDao = new VehicleDao();
         List<Vehicle> vehicles = vehicleDao.getVehicles();
         request.setAttribute("vehicles_list", vehicles);
+
+    }
+
+    private void listVehicles(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        loadVehicles(request, response);
         RequestDispatcher dispatcher = request.getRequestDispatcher("add_reservation.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void loadVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        // Get the vehicle Id
+        String vehicleId = request.getParameter("vehicleId");
+
+        // Load the vehicle
+        VehicleDao vehicleDao = new VehicleDao();
+        Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
+
+        // Place vehicle in request attribute
+        request.setAttribute("theVehicle", theVehicle);
+
+        // Send to jsp page
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("update_vehicle.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+
+    private void carPark(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        loadVehicles(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("car_park.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -111,20 +153,31 @@ public class CarParkControllerServlet extends HttpServlet {
             String commandId = request.getParameter("command");
 
             switch (commandId) {
-                case "ADD":
+                case "ADD_R":
                     addReservation(request, response);
+                    break;
+
+                case "ADD_V":
+                    addVehicle(request, response);
                     break;
 
                 case "DELETE":
                     deleteReservation(request, response);
                     break;
 
-                case "UPDATE":
+                case "UPDATE_R":
                     updateReservation(request, response);
                     break;
 
+                case "UPDATE_V":
+                    updateVehicle(request, response);
+
                 case "DECIDE":
                     approveReservation(request, response);
+                    break;
+
+                case "DELETE_V":
+                    deleteVehicle(request, response);
                     break;
 
                 default:
@@ -183,6 +236,7 @@ public class CarParkControllerServlet extends HttpServlet {
         response.sendRedirect("CarParkControllerServlet");
 
     }
+
     //TODO: Check the dates!
     private void updateReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
@@ -212,6 +266,56 @@ public class CarParkControllerServlet extends HttpServlet {
         reservationDao.approveReservation(reservation, request.getParameter("verdict"));
 
         response.sendRedirect("UserControllerServlet");
+    }
+
+    //Vehicles
+    //TODO: Check that the car is not inserted
+    private void addVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        // Getting parameters
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        String plate = request.getParameter("plate");
+        String type = request.getParameter("type");
+
+        Vehicle vehicle = new Vehicle(type, plate, model, brand);
+        VehicleDao vehicleDao = new VehicleDao();
+
+        vehicleDao.saveVehicle(vehicle);
+
+        carPark(request, response);
+
+    }
+
+    private void deleteVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        String vehicleId = request.getParameter("vehicleId");
+
+        VehicleDao vehicleDao = new VehicleDao();
+
+        vehicleDao.delete(vehicleId);
+
+        carPark(request, response);
+
+    }
+
+    private void updateVehicle (HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        // Getting parameters
+        String type = request.getParameter("type");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        String plate = request.getParameter("plate");
+
+        // Getting the vehicle
+        VehicleDao vehicleDao = new VehicleDao();
+        Vehicle vehicle = vehicleDao.getTheVehicle(request.getParameter("vehicleId"));
+
+        // Update
+        vehicleDao.updateVehicle(vehicle, type, brand, model, plate);
+
+        carPark(request, response);
+
     }
 
 }
