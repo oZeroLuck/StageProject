@@ -36,11 +36,10 @@ public class HibernateUtil {
 
                 configuration.setProperties(settings);
 
-                //Annotations
+                // Tables
                 configuration.addAnnotatedClass(User.class);
                 configuration.addAnnotatedClass(Reservation.class);
                 configuration.addAnnotatedClass(Vehicle.class);
-                //configuration.addAnnotatedClass(CarPark.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

@@ -91,7 +91,7 @@ public class ReservationDao {
 
             // Update the info
             updatedReservation.setStartDate(newStartDate);
-            updatedReservation.setEndDate(newEndDate);
+            //updatedReservation.setEndDate(1);
 
             session.update(updatedReservation);
 

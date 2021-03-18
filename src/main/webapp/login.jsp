@@ -8,8 +8,6 @@
 
 <fmt:setBundle basename="labels" />
 
-<!-- TODO: Refactor to meet requested specifications -->
-
 <html>
 <head>
     <meta charset="UTF-8">
@@ -23,7 +21,7 @@
 
     <input type="hidden" name="command" value="LOGIN">
 
-    Name:<input type="text" name="username"><br/><br/>
+    Username:<input type="text" name="username"><br/><br/>
     Password:<input type="password" name="userpassword"><br/><br/>
 
     <input type="submit" name="Login">
@@ -34,24 +32,5 @@
 
 ${message}
 
-<!-- Testing
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Email</th>
-        <th>Password</th>
-    </tr>
-
-    <c:forEach var="user" items="${users}">
-    <tr>
-        <td>${user.firstName}</td>
-        <td>${user.lastName}</td>
-        <td>${user.email}</td>
-        <td>${user.password}</td>
-    </tr>
-    </c:forEach>
-</table>
--->
 </body>
 </html>

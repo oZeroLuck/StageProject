@@ -1,6 +1,7 @@
 package com.rental.entity;
 
 import javax.persistence.*;
+import java.util.Locale;
 
 @Entity
 @Table
@@ -40,11 +41,10 @@ public class Vehicle {
 
 
     public Vehicle(String type, String licencePlate, String model, String brand) {
-        this.type = type;
-        this.licencePlate = licencePlate;
-        this.model = model;
-        this.brand = brand;
-        this.hasReservation = false;
+        this.type = type.toUpperCase();
+        this.licencePlate = licencePlate.toUpperCase();
+        this.model = model.toUpperCase();
+        this.brand = brand.toUpperCase();
     }
 
     public Vehicle() {

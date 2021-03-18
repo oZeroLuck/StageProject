@@ -216,15 +216,66 @@ public class CarParkControllerServlet extends HttpServlet {
         VehicleDao vehicleDao = new VehicleDao();
         Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
 
+                // Check command type
+                if (request.getParameter("secondCommand").equals("ADD")) {
+                    //Add
 
-        Reservation theReservation = new Reservation(theVehicle, startDate, endDate, currentUser);
-        vehicleDao.updateVehicle(theVehicle ,true);
-        ReservationDao theReservationDao = new ReservationDao();
+                    if (theVehicle != null) {
 
-        theReservationDao.saveReservation(theReservation);
+                    Reservation theReservation = new Reservation(theVehicle, sDate, eDate, currentUser, true);
 
-        response.sendRedirect("CarParkControllerServlet");
+                    theReservationDao.saveReservation(theReservation);
 
+                    response.sendRedirect("CarParkControllerServlet");
+
+                    } else {
+
+                        session.setAttribute("sessionCommand", "LOAD_VS");
+                        session.setAttribute("message", "Vehicle not chosen");
+
+                        response.sendRedirect("CarParkControllerServlet");
+
+                    }
+                } else {
+                    // Request Update
+                    Reservation oldReservation = theReservationDao.getTheReservation(
+                            request.getParameter("reservationId"), false);
+                    Date oldStartDate = oldReservation.getStartDate();
+                    Date oldEndDate = oldReservation.getStartDate();
+
+                    // Check date validity from old to new
+                    if (sDate.after(oldStartDate) && (eDate.after(oldEndDate))) {
+                        Reservation theReservation = new Reservation(theVehicle, sDate, eDate, currentUser, true);
+                        theReservation.setId(Integer.parseInt(request.getParameter("reservationId")));
+
+                        theReservationDao.saveReservation(theReservation);
+
+                        session.setAttribute("sessionCommand", " ");
+
+                        response.sendRedirect("CarParkControllerServlet");
+                        return;
+
+                    } else {
+                        session.setAttribute("sessionCommand", "LOAD_R");
+                        session.setAttribute("message", "Invalid change choice");
+
+                        response.sendRedirect("CarParkControllerServlet");
+                    }
+
+                }
+
+            } else {
+
+                if(request.getParameter("sessionCommand").equals("ADD"))
+                    sessionCommand = "LOAD_VS";
+                else
+                    sessionCommand = "LOAD_V";
+
+                session.setAttribute("sessionCommand", sessionCommand);
+                session.setAttribute("message", "Invalid dates");
+
+                response.sendRedirect("CarParkControllerServlet");
+            }
     }
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -266,13 +317,13 @@ public class CarParkControllerServlet extends HttpServlet {
 
     private void approveReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
-        // Get reservation
+        /* Get reservation
         ReservationDao reservationDao = new ReservationDao();
         Reservation reservation = reservationDao.getTheReservation(request.getParameter("reservationId"));
 
         reservationDao.approveReservation(reservation, request.getParameter("verdict"));
 
-        response.sendRedirect("UserControllerServlet");
+        response.sendRedirect("UserControllerServlet");*/
     }
 
     //Vehicles
@@ -323,6 +374,16 @@ public class CarParkControllerServlet extends HttpServlet {
 
         carPark(request, response);
 
+    }
+
+    private boolean checkDates(Date first, Date second) throws Exception{
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date today = format.parse(format.format(Calendar.getInstance().getTime()));
+        if(first.before(second) && (first.before(today) || (first.equals(today))))
+            return true;
+        return false;
     }
 
 }

@@ -19,14 +19,18 @@ public class VehicleDao {
 
     public Vehicle getTheVehicle(String vehicleId) {
 
-        //To int
-        int idToInt = Integer.parseInt(vehicleId);
+        if (vehicleId != null) {
 
-        //Get session
-        Session session = HibernateUtil.getSessionFactory().openSession();
+            //To int
+            int idToInt = Integer.parseInt(vehicleId);
 
-        //Send requested vehicle
-        return session.get(Vehicle.class, idToInt);
+            //Get session
+            Session session = HibernateUtil.getSessionFactory().openSession();
+
+            //Send requested vehicle
+            return session.get(Vehicle.class, idToInt);
+
+        } return null;
 
     }
 

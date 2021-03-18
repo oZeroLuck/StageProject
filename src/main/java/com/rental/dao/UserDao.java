@@ -43,7 +43,8 @@ public class UserDao {
 
         try {
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User U WHERE U.username = :username").setParameter("username", username).uniqueResult();
+            user = (User) session.createQuery("FROM User as U WHERE U.username = :username")
+                    .setParameter("username", theUsername).uniqueResult();
 
             if (user != null && user.getPassword().equals(password))
                 return user;
