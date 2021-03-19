@@ -17,17 +17,17 @@
 
     <div id="wrapper">
         <div id="header">
-            <c:url var="hpLink" value="CarParkControllerServlet">
-                <c:param name="command" value=" "/>
-            </c:url>
-            <a href="${hpLink}"><fmt:message key="label.homepage" /></a>
+            <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
              |
             <c:url var="parkLink" value="CarParkControllerServlet">
                 <c:param name="command" value="CAR_PARK"/>
             </c:url>
             <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
              |
-            <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
+            <c:url var="profile" value="UserControllerServlet">
+                <c:param name="command" value="PROFILE"/>
+            </c:url>
+            <a href="${profile}"><fmt:message key="label.profile" /></a>
         </div>
     </div>
 
@@ -73,7 +73,7 @@
                         <td>${tempReservation.endDate}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${empty tempReservation.approved}">
+                                <c:when test="${tempReservation.approved == 'pending'}">
                                     <fmt:message key="label.pending"/>
                                 </c:when>
                                 <c:otherwise>
@@ -83,7 +83,8 @@
                         </td>
                         <td>
                             <form action="CarParkControllerServlet" method="GET">
-                                <input type="hidden" name="command" value="LOAD_R" />
+                                <input type="hidden" name="command" value="REQUEST" />
+                                <input type="hidden" name="secondCommand" value="UPDATE">
                                 <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
                                 <input type="submit" value="<fmt:message key="label.update"/>"/>
                             </form>

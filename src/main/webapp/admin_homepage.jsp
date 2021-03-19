@@ -25,7 +25,10 @@
         </c:url>
         <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
         |
-        <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
+        <c:url var="profile" value="UserControllerServlet">
+            <c:param name="command" value="PROFILE"/>
+        </c:url>
+        <a href="${profile}"><fmt:message key="label.profile" /></a>
     </div>
 </div>
 
@@ -59,21 +62,21 @@
             <td>
                 <form action="UserControllerServlet" method="GET">
                     <input type="hidden" name="command" value="LOAD">
-                    <input type="hidden" name="customerID" value="${tempCustomer.id}">
+                    <input type="hidden" name="userId" value="${tempCustomer.id}">
                     <input type="submit" value="<fmt:message key="label.update"/>">
                 </form>
             </td>
             <td>
                 <form action="UserControllerServlet" method="POST">
                     <input type="hidden" name="command" value="DELETE">
-                    <input type="hidden" name="customerId" value="${tempCustomer.id}">
+                    <input type="hidden" name="userId" value="${tempCustomer.id}">
                     <input type="submit" value="<fmt:message key="label.delete"/>">
                 </form>
             </td>
             <td>
                 <form action="CarParkControllerServlet" method="GET">
                     <input type="hidden" name="command" value="LIST">
-                    <input type="hidden" name="customerId" value="${tempCustomer.id}">
+                    <input type="hidden" name="userId" value="${tempCustomer.id}">
                     <input type="submit" value="<fmt:message key="label.reservations"/>">
                 </form>
             </td>

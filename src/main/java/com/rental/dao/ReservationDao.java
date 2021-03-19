@@ -1,5 +1,8 @@
 package com.rental.dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.rental.entity.Vehicle;
@@ -57,12 +60,6 @@ public class ReservationDao {
 
             //Getting the reservation by Id
             Reservation reservation = getTheReservation(reservationId);
-
-            // Getting the vehicle by Id
-            Vehicle vehicle = reservation.getTheVehicle();
-            VehicleDao vehicleDao = new VehicleDao();
-
-            vehicleDao.updateVehicle(vehicle, false);
 
             //Delete it
             session.delete(reservation);
@@ -130,6 +127,32 @@ public class ReservationDao {
             e.printStackTrace();
         } finally {
             //Close connection
+            session.close();
+        }
+
+    }
+
+    public void requestUpdate(Reservation reservation, Date sDate, Date eDate, Vehicle vehicle) {
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            reservation.setApproved(null);
+            reservation.setStartDate(sDate);
+            reservation.setEndDate(eDate);
+            reservation.setTheVehicle(vehicle);
+
+            session.update(reservation);
+
+            transaction.commit();
+        } catch (HibernateException e) {
+            if(transaction!=null)
+                transaction.rollback();
+            e.printStackTrace();
+        } finally {
             session.close();
         }
 

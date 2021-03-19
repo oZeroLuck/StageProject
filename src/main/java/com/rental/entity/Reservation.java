@@ -32,20 +32,16 @@ public class Reservation {
     @JoinColumn(name="customer_id", nullable = false)
     private User theCustomer;
 
-    @Column
-    private boolean needUpdate;
-
     public  Reservation() {
 
     }
 
-    public Reservation(Vehicle theVehicle, Date startDate, Date endDate, User theCustomer, boolean needUpdate) {
+    public Reservation(Vehicle theVehicle, Date startDate, Date endDate, User theCustomer) {
         this.theVehicle = theVehicle;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.approved = null;
+        this.approved = "pending";
         this.theCustomer = theCustomer;
-        this.needUpdate = needUpdate;
     }
 
     public String getApproved() {return approved; }
@@ -90,22 +86,6 @@ public class Reservation {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public boolean isnNeedUpdate() {
-        return needUpdate;
-    }
-
-    public void setUpdate(boolean update) {
-        this.needUpdate = update;
-    }
-
-    public boolean isNeedUpdate() {
-        return needUpdate;
-    }
-
-    public void setNeedUpdate(boolean needUpdate) {
-        this.needUpdate = needUpdate;
     }
 
 }

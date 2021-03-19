@@ -63,7 +63,7 @@ public class UserDao {
 
     }
 
-    public User getCustomer(String customerId) {
+    public User getUser(String customerId) {
 
         int toInt = Integer.parseInt(customerId);
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -79,7 +79,7 @@ public class UserDao {
         try {
             transaction = session.beginTransaction();
 
-            User customer = getCustomer(customerId);
+            User customer = getUser(customerId);
 
             session.delete(customer);
             transaction.commit();

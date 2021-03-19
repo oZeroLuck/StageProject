@@ -27,7 +27,10 @@
         </c:url>
         <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
         |
-        <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
+        <c:url var="profile" value="UserControllerServlet">
+            <c:param name="command" value="PROFILE"/>
+        </c:url>
+        <a href="${profile}"><fmt:message key="label.profile" /></a>
     </div>
 </div>
 

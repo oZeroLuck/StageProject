@@ -1,7 +1,6 @@
 package com.rental.entity;
 
 import javax.persistence.*;
-import java.util.Locale;
 
 @Entity
 @Table
@@ -23,10 +22,6 @@ public class Vehicle {
 
     @Column
     private String brand;
-
-    // Until I find a way to query it
-    @Column
-    private boolean hasReservation;
 
     @OneToOne(mappedBy = "theVehicle", cascade = CascadeType.ALL)
     private Reservation reservation;
@@ -91,11 +86,4 @@ public class Vehicle {
         this.id = id;
     }
 
-    public boolean isHasReservation() {
-        return hasReservation;
-    }
-
-    public void setHasReservation(boolean hasReservation) {
-        this.hasReservation = hasReservation;
-    }
 }

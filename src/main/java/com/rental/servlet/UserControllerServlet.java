@@ -34,7 +34,11 @@ public class UserControllerServlet extends HttpServlet {
                     break;
 
                 case "LOAD":
-                    loadCustomer(request, response);
+                    loadUser(request, response);
+                    break;
+
+                case "PROFILE":
+                    loadProfile(request, response);
                     break;
 
                 default:
@@ -89,15 +93,15 @@ public class UserControllerServlet extends HttpServlet {
 
     }
 
-    private void loadCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void loadUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        String customerId = request.getParameter("customerID");
+        String userId = request.getParameter("userId");
 
         UserDao userDao = new UserDao();
-        User customer = userDao.getCustomer(customerId);
+        User user = userDao.getUser(userId);
 
-        request.setAttribute("theCustomer", customer);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("update_customer.jsp");
+        request.setAttribute("theUser", user);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("update_user.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -125,6 +129,16 @@ public class UserControllerServlet extends HttpServlet {
         out.print("You have successfully logged out!");
 
         out.close();
+
+    }
+
+    private void loadProfile(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        request.setAttribute("user", user);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("user_profile.jsp");
+        dispatcher.forward(request, response);
 
     }
 
@@ -160,7 +174,7 @@ public class UserControllerServlet extends HttpServlet {
                     break;
 
                 case "UPDATE":
-                    updateCustomer(request, response);
+                    updateUser(request, response);
                     break;
 
                 default:
@@ -173,7 +187,9 @@ public class UserControllerServlet extends HttpServlet {
 
     }
 
-    private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    // TODO: Check from where are you from
+
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -182,9 +198,9 @@ public class UserControllerServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         UserDao userDao = new UserDao();
-        User upCustomer = userDao.getCustomer(request.getParameter("customerId"));
+        User upUser = userDao.getUser(request.getParameter("userId"));
 
-        userDao.updateCustomer(upCustomer, firstName, lastName, email, username, password);
+        userDao.updateCustomer(upUser, firstName, lastName, email, username, password);
 
         response.sendRedirect("UserControllerServlet");
 

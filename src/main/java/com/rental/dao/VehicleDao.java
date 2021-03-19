@@ -1,6 +1,5 @@
 package com.rental.dao;
 
-import com.rental.entity.Reservation;
 import com.rental.entity.Vehicle;
 import com.rental.util.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -107,32 +106,9 @@ public class VehicleDao {
 
     }
 
-    public void updateVehicle(Vehicle vehicle, boolean hasReservation) {
-
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            vehicle.setHasReservation(hasReservation);
-
-            session.merge(vehicle);
-            transaction.commit();
-
-        } catch (Exception e) {
-            if(transaction!=null)
-                transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
-
     public List<Vehicle> available() {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.createQuery("from Vehicle as V where V.hasReservation = false", Vehicle.class).list();
-
+        return session.createQuery("from Vehicle as V where not exists (select id from Reservation as R where R.theVehicle = V)", Vehicle.class).list();
     }
 }

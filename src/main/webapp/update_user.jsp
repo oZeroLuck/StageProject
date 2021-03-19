@@ -25,7 +25,10 @@
         </c:url>
         <a href="${parkLink}"><fmt:message key="label.carPark" /></a>
         |
-        <a href="customer_profile.jsp"><fmt:message key="label.userProfile" /></a>
+        <c:url var="profile" value="UserControllerServlet">
+            <c:param name="command" value="PROFILE"/>
+        </c:url>
+        <a href="${profile}"><fmt:message key="label.profile" /></a>
     </div>
 </div>
 
@@ -33,27 +36,27 @@
 
 <form action="UserControllerServlet" method="POST">
     <table>
-    <input type="hidden" name="customerId" value="${theCustomer.id}">
+    <input type="hidden" name="userId" value="${theUser.id}">
     <input type="hidden" name="command" value="UPDATE">
         <tr>
             <th><label><fmt:message key="label.name" /> :</label></th>
-            <td><label><input type="text" name="firstName" value="${theCustomer.firstName}"/></label></td>
+            <td><label><input type="text" name="firstName" value="${theUser.firstName}"/></label></td>
         </tr>
         <tr>
             <th><label><fmt:message key="label.lastName" /> :</label></th>
-            <td><label><input type="text" name="lastName" value="${theCustomer.lastName}" /></label></td>
+            <td><label><input type="text" name="lastName" value="${theUser.lastName}" /></label></td>
         </tr>
         <tr>
             <th><label>E-mail :</label></th>
-            <td><label><input type="text" name="email" value="${theCustomer.email}"/></label></td>
+            <td><label><input type="text" name="email" value="${theUser.email}"/></label></td>
         </tr>
         <tr>
             <th><label>Username :</label></th>
-            <td><label><input type="text" name="username" value="${theCustomer.username}"/></label></td>
+            <td><label><input type="text" name="username" value="${theUser.username}"/></label></td>
         </tr>
-        <tr>
+        <tr> <!--Note: it's a very bad and crude design -->
             <th><label>Password :</label></th>
-            <td><label><input type="text" name="password" value="${theCustomer.password}"/></label></td>
+            <td><label><input type="text" name="password" value="${theUser.password}"/></label></td>
         </tr>
     </table>
     <br/>
