@@ -12,6 +12,7 @@ public class Reservation {
     @Column
     private int id;
 
+
     @OneToOne
     @JoinColumn(name="vehicle_id", referencedColumnName = "id")
     private Vehicle theVehicle;
@@ -98,4 +99,13 @@ public class Reservation {
     public void setUpdate(boolean update) {
         this.needUpdate = update;
     }
+
+    public boolean isNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
 }

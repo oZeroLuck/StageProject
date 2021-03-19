@@ -42,11 +42,11 @@
             <fmt:message key="label.update" /> <fmt:message key="label.startDate"/> :
                 <input type="date" name="newStartDate"
                     value="${theReservation.startDate}"
-                    min="<fmt:formatDate value="${now}" pattern="yyyy-mm-dd" />" max="2099-12-31">
+                    min="<fmt:formatDate value="${now}" pattern="dd-MM-yyyy" />" max="2099-12-31">
             <fmt:message key="label.endDate"/> :
                 <input type="date" name="newEndDate"
                     value="${theReservation.endDate}"
-                    min="<fmt:formatDate value="${now}" pattern="yyyy-mm-dd" />" max="2099-12-31">
+                    min="<fmt:formatDate value="${now}" pattern="dd-MM-yyyy" />" max="2099-12-31">
 
             <input type="submit" name="<fmt:message key="label.update"/>">
         </form>

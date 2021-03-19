@@ -40,7 +40,8 @@
     <br/>
 
     <c:url var="addLink" value="CarParkControllerServlet">
-        <c:param name ="command" value="LOAD_VS" />
+        <c:param name ="command" value="REQUEST" />
+        <c:param name ="secondCommand" value="ADD"/>
     </c:url>
 
     <input type="button" value="<fmt:message key="label.addReservation" />"

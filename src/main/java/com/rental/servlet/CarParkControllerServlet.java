@@ -39,6 +39,8 @@ public class CarParkControllerServlet extends HttpServlet {
                 case "LOAD_R":
                     loadReservation(request, response);
                     break;
+                case "REQUEST":
+                    break;
 
                 case "CAR_PARK":
                     carPark(request, response);
@@ -136,6 +138,7 @@ public class CarParkControllerServlet extends HttpServlet {
 
         //Get the reservation id
         String reservationId = request.getParameter("reservationId");
+        System.out.println(reservationId);
 
         //Getting the reservation
         ReservationDao reservationDao = new ReservationDao();
@@ -157,7 +160,6 @@ public class CarParkControllerServlet extends HttpServlet {
         try {
             // Getting the command from the request
             String commandId = request.getParameter("command");
-
             switch (commandId) {
                 case "ADD_R":
                     addReservation(request, response);
@@ -212,61 +214,74 @@ public class CarParkControllerServlet extends HttpServlet {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
 
-        //Get vehicle from id
-        VehicleDao vehicleDao = new VehicleDao();
-        Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
+        // Check if dates are empty
+        if (startDate.equals("")||endDate.equals("")) {
+            message = "Wrong date selection";
+            if (secondCommand)
+                // TODO: Change after the add and update page merge
+                sessionCommand = "LOAD_VS";
+             else
+                sessionCommand = "LOAD_R";
 
-                // Check command type
-                if (request.getParameter("secondCommand").equals("ADD")) {
-                    //Add
+        } else {
+            // Converting dates
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date sDate = format.parse(startDate);
+            Date eDate = format.parse(endDate);
+            Date today = format.parse(format.format(Calendar.getInstance().getTime()));
 
-                    if (theVehicle != null) {
+            // Checking the date validity
+            if(sDate.before(eDate) && (sDate.after(today) || sDate.equals(today))) {
+                // Setting the reservation DAO
+                ReservationDao reservationDao = new ReservationDao();
+                int oldId = 0;
+                boolean errorFlag = false;
 
-                    Reservation theReservation = new Reservation(theVehicle, sDate, eDate, currentUser, true);
+                // Getting the vehicle
+                VehicleDao vehicleDao = new VehicleDao();
+                Vehicle vehicle = vehicleDao.getTheVehicle(request.getParameter("selected"));
 
-                    theReservationDao.saveReservation(theReservation);
+                // Update reservation date check
+                if(!secondCommand) {
 
-                    response.sendRedirect("CarParkControllerServlet");
+                    session.setAttribute("vehicleId", vehicle.getId());
+                    Reservation oldReservation = reservationDao.getTheReservation(
+                            request.getParameter("reservationId"), true);
+                    Date oldStartDate = oldReservation.getStartDate();
+                    Date oldEndDate = oldReservation.getEndDate();
+                    oldId = oldReservation.getId();
+                    System.out.println(oldId);
 
-                    } else {
-
-                        session.setAttribute("sessionCommand", "LOAD_VS");
-                        session.setAttribute("message", "Vehicle not chosen");
-
-                        response.sendRedirect("CarParkControllerServlet");
-
+                    // Update dates not valid
+                    if (!(sDate.after(oldStartDate) && (sDate.after(today) || sDate.equals(today)))) {
+                        errorFlag = true;
+                        message = "Dates not valid";
+                    }
+                    if (sDate.equals(oldStartDate) && eDate.equals(oldEndDate)) {
+                        errorFlag = true;
+                        message = "Dates aren't different";
                     }
                 } else {
-                    // Request Update
-                    Reservation oldReservation = theReservationDao.getTheReservation(
-                            request.getParameter("reservationId"), false);
-                    Date oldStartDate = oldReservation.getStartDate();
-                    Date oldEndDate = oldReservation.getStartDate();
-
-                    // Check date validity from old to new
-                    if (sDate.after(oldStartDate) && (eDate.after(oldEndDate))) {
-                        Reservation theReservation = new Reservation(theVehicle, sDate, eDate, currentUser, true);
-                        theReservation.setId(Integer.parseInt(request.getParameter("reservationId")));
-
-                        theReservationDao.saveReservation(theReservation);
-
-                        session.setAttribute("sessionCommand", " ");
-
-                        response.sendRedirect("CarParkControllerServlet");
-                        return;
-
-                    } else {
-                        session.setAttribute("sessionCommand", "LOAD_R");
-                        session.setAttribute("message", "Invalid change choice");
-
-                        response.sendRedirect("CarParkControllerServlet");
+                    // Check if vehicle is not selected from add
+                    if (vehicle == null) {
+                        errorFlag = true;
+                        message = "No vehicle";
                     }
+                }
 
+                if (!errorFlag) {
+                    Reservation reservation = new Reservation(vehicle, sDate, eDate, currentUser, true);
+                    reservationDao.saveReservation(reservation);
+                    if (!secondCommand)
+                        reservationDao.changeId(reservation, oldId);
+                    sessionCommand = " ";
                 }
 
             } else {
-
-                if(request.getParameter("sessionCommand").equals("ADD"))
+                // Date not valid
+                message = "Cannot select date past today or end date before start date";
+                if (secondCommand)
+                    // TODO: Change after the add and update page merge
                     sessionCommand = "LOAD_VS";
                 else
                     sessionCommand = "LOAD_V";
@@ -357,41 +372,4 @@ public class CarParkControllerServlet extends HttpServlet {
 
     }
 
-    private void updateVehicle (HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        // Getting parameters
-        String type = request.getParameter("type");
-        String brand = request.getParameter("brand");
-        String model = request.getParameter("model");
-        String plate = request.getParameter("plate");
-
-        // Getting the vehicle
-        VehicleDao vehicleDao = new VehicleDao();
-        Vehicle vehicle = vehicleDao.getTheVehicle(request.getParameter("vehicleId"));
-
-        // Update
-        vehicleDao.updateVehicle(vehicle, type, brand, model, plate);
-
-        carPark(request, response);
-
-    }
-
-    private boolean checkDates(Date first, Date second) throws Exception{
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date today = format.parse(format.format(Calendar.getInstance().getTime()));
-        if(first.before(second) && (first.before(today) || (first.equals(today))))
-            return true;
-        return false;
-    }
-
 }
-
-/*
-
-
-
-
-
- */
