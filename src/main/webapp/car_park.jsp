@@ -41,9 +41,11 @@
 <hr>
 
 <c:if test="${user.isAdmin}">
-    <input type="button" value="<fmt:message key="label.addVehicle"/>"
-           onclick="window.location.href='add_vehicle.jsp'; return false;" />
-    <hr>
+    <form action="CarParkControllerServlet" method="GET">
+        <input type="hidden" name="command" value="REQ_V">
+        <input type="hidden" name="secondCommand" value="ADD">
+        <input type="submit" value="<fmt:message key="label.addVehicle"/>">
+    </form>
 </c:if>
 
 <table>
@@ -65,7 +67,7 @@
             <c:if test="${user.isAdmin}">
                 <td>
                     <form action="CarParkControllerServlet" method="GET">
-                        <input type="hidden" name="command" value="LOAD_V">
+                        <input type="hidden" name="command" value="REQ_V">
                         <input type="hidden" name="vehicleId" value="${tempVehicle.id}">
                         <input type="submit" value="<fmt:message key="label.update"/>">
                     </form>

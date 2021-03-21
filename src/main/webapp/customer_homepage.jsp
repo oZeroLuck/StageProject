@@ -81,19 +81,30 @@
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <td>
-                            <form action="CarParkControllerServlet" method="GET">
-                                <input type="hidden" name="command" value="REQUEST" />
-                                <input type="hidden" name="secondCommand" value="UPDATE">
-                                <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
-                                <input type="submit" value="<fmt:message key="label.update"/>"/>
-                            </form>
-                            <form action="CarParkControllerServlet" method="POST">
-                                <input type="hidden" name="command" value="DELETE" />
-                                <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
-                                <input type="submit" value="<fmt:message key="label.delete"/>"/>
-                            </form>
-                        </td>
+                        <!-- Time distance calculation -->
+                        <fmt:parseNumber var="daysDifference"
+                                         value="${( tempReservation.startDate.time - today.time ) / (1000*60*60*24) }"
+                                         integerOnly="true" />
+                        <c:choose>
+                            <c:when test="${daysDifference >= 2}">
+                                <td>
+                                    <form action="CarParkControllerServlet" method="GET">
+                                        <input type="hidden" name="command" value="REQUEST" />
+                                        <input type="hidden" name="secondCommand" value="UPDATE">
+                                        <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
+                                        <input type="submit" value="<fmt:message key="label.update"/>"/>
+                                    </form>
+                                    <form action="CarParkControllerServlet" method="POST">
+                                        <input type="hidden" name="command" value="DELETE" />
+                                        <input type="hidden" name="reservationId" value="${tempReservation.id}"/>
+                                        <input type="submit" value="<fmt:message key="label.delete"/>"/>
+                                    </form>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><fmt:message key="label.none"/></td>
+                            </c:otherwise>
+                        </c:choose>
                      </tr>
 
                 </c:forEach>

@@ -36,9 +36,17 @@
 
 <form action="CarParkControllerServlet" method="POST">
 
-    <input type="hidden" name="command" value="UPDATE_V"/>
+    <input type="hidden" name="command" value="V_ACTION">
 
-    <input type="hidden" name="vehicleId" value="${theVehicle.id}">
+    <c:choose>
+        <c:when test="${isAdd}">
+            <input type="hidden" name="secondCommand" value="ADD">
+        </c:when>
+        <c:otherwise>
+            <input type="hidden" name="command" value="UPDATE"/>
+            <input type="hidden" name="vehicleId" value="${theVehicle.id}">
+        </c:otherwise>
+    </c:choose>
 
     <table>
         <tr>
@@ -58,9 +66,14 @@
             <td><label><input type="text" name="type" value="${theVehicle.type}"/></label></td>
         </tr>
     </table>
-
-    <input type="submit" name="<fmt:message key="label.update"/>" />
-
+    <c:choose>
+        <c:when test="${isAdd}">
+            <input type="submit" name="<fmt:message key="label.addVehicle"/>"/>
+        </c:when>
+        <c:otherwise>
+            <input type="submit" name="<fmt:message key="label.update"/>"/>
+        </c:otherwise>
+    </c:choose>
     <hr>
 
 </form>

@@ -16,7 +16,7 @@
 <!-- Header -->
 <div id="wrapper">
     <div id="header">
-        <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
+        <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
         |
         <c:url var="parkLink" value="CarParkControllerServlet">
             <c:param name="command" value="CAR_PARK"/>
@@ -33,6 +33,7 @@
 <hr>
 <form action="CarParkControllerServlet" method="POST">
     <input type="hidden" name="command" value="DECIDE">
+    <input type="hidden" name="userId" value="${userId}">
     <table>
         <tr>
             <th><fmt:message key="label.reservation" /></th>
@@ -53,25 +54,23 @@
                 <td>${tempReservation.endDate}</td>
                 <td>
                     <c:choose>
-                        <c:when test="${empty tempReservation.approved}">
+                        <c:when test="${tempReservation.approved == 'pending'}">
                             <fmt:message key="label.pending"/>
+                                <td>
+                                    <input type="hidden" name="verdict" value="Approved">
+                                    <input type="submit" value="<fmt:message key="label.approve"/>">
+                                </td>
+                                <td>
+                                    <input type="hidden" name="verdict" value="Denied">
+                                    <input type="submit" value="<fmt:message key="label.deny"/>">
+                                </td>
                         </c:when>
                         <c:otherwise>
                             ${tempReservation.approved}
                         </c:otherwise>
                     </c:choose>
                 </td>
-                    <c:if test="${empty tempReservation.approved}">
-                        <td>
-                            <input type="hidden" name="verdict" value="Approved">
-                            <input type="submit" value="<fmt:message key="label.approve"/>">
-                        </td>
-                        <td>
-                            <input type="hidden" name="verdict" value="Denied">
-                            <input type="submit" value="<fmt:message key="label.deny"/>">
-                        </td>
-                    </c:if>
-                </tr>
+            </tr>
         </c:forEach>
     </table>
 </form>

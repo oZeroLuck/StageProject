@@ -111,7 +111,5 @@
 
 </form>
 
-${theEndDate} ... ${theStartDate}
-
 </body>
 </html>

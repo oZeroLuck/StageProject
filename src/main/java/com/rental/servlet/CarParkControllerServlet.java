@@ -40,7 +40,7 @@ public class CarParkControllerServlet extends HttpServlet {
                     carPark(request, response);
                     break;
 
-                case "LOAD_V":
+                case "REQ_V":
                     loadVehicle(request, response);
                     break;
 
@@ -55,9 +55,8 @@ public class CarParkControllerServlet extends HttpServlet {
 
     }
 
+
     //Get methods
-
-
 
     private void listReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -67,17 +66,19 @@ public class CarParkControllerServlet extends HttpServlet {
 
         // Branch between admin and customer types
         if (user.isAdmin()) {
-            int customerId = Integer.parseInt(request.getParameter("customerId"));
-            List<Reservation> reservations = reservationDao.getUserReservations(customerId);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer_reservations.jsp");
-            request.setAttribute("reservation_list", reservations);
-            dispatcher.forward(request, response);
+            userId = Integer.parseInt(request.getParameter("userId"));
+            request.setAttribute("userId", userId);
+            dispatcher = request.getRequestDispatcher("customer_reservations.jsp");
         } else {
-            List<Reservation> reservations = reservationDao.getUserReservations(user.getUserId());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
-            request.setAttribute("reservation_list", reservations);
-            dispatcher.forward(request, response);
+            userId = user.getUserId();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = format.parse(format.format(new Date()));
+            request.setAttribute("today", today);
+            dispatcher = request.getRequestDispatcher("customer_homepage.jsp");
         }
+        List<Reservation> reservations = reservationDao.getUserReservations(userId, filter, value);
+        request.setAttribute("reservation_list", reservations);
+        dispatcher.forward(request, response);
     }
 
     private void loadRequestPage(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -121,20 +122,26 @@ public class CarParkControllerServlet extends HttpServlet {
     }
 
     private void loadVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // Get the second command
+        boolean isAdd = !(request.getParameter("secondCommand") == null);
 
-        // Get the vehicle Id
-        String vehicleId = request.getParameter("vehicleId");
+        if(isAdd)
+            request.setAttribute("isAdd", true);
 
-        // Load the vehicle
-        VehicleDao vehicleDao = new VehicleDao();
-        Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
+        else {
+            // Get the vehicle Id
+            String vehicleId = request.getParameter("vehicleId");
 
-        // Place vehicle in request attribute
-        request.setAttribute("theVehicle", theVehicle);
+            // Load the vehicle
+            VehicleDao vehicleDao = new VehicleDao();
+            Vehicle theVehicle = vehicleDao.getTheVehicle(vehicleId);
 
+            // Place vehicle in request attribute
+            request.setAttribute("theVehicle", theVehicle);
+        }
         // Send to jsp page
         RequestDispatcher dispatcher =
-                request.getRequestDispatcher("update_vehicle.jsp");
+                request.getRequestDispatcher("vehicle_request.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -181,8 +188,8 @@ public class CarParkControllerServlet extends HttpServlet {
                     addReservation(request, response);
                     break;
 
-                case "ADD_V":
-                    addVehicle(request, response);
+                case "V_ACTION":
+                    actionVehicle(request, response);
                     break;
 
                 case "DELETE":
@@ -339,12 +346,12 @@ public class CarParkControllerServlet extends HttpServlet {
 
         reservationDao.approveReservation(reservation, request.getParameter("verdict"));
 
-        response.sendRedirect("UserControllerServlet");
+        listReservation(request, response);
+        //response.sendRedirect("UserControllerServlet");
     }
 
     //Vehicles
-    //TODO: Check that the car is not inserted
-    private void addVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    private void actionVehicle(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         // Getting parameters
         String brand = request.getParameter("brand");
@@ -352,10 +359,19 @@ public class CarParkControllerServlet extends HttpServlet {
         String plate = request.getParameter("plate");
         String type = request.getParameter("type");
 
-        Vehicle vehicle = new Vehicle(type, plate, model, brand);
         VehicleDao vehicleDao = new VehicleDao();
 
-        vehicleDao.saveVehicle(vehicle);
+        if(request.getParameter("secondCommand") == null) {
+
+            Vehicle vehicle = vehicleDao.getTheVehicle(request.getParameter("vehicleId"));
+            vehicleDao.updateVehicle(vehicle, type, brand, model, plate);
+
+        } else {
+
+            Vehicle vehicle = new Vehicle(type, plate, model, brand);
+            vehicleDao.saveVehicle(vehicle);
+
+        }
 
         carPark(request, response);
 
@@ -372,5 +388,6 @@ public class CarParkControllerServlet extends HttpServlet {
         carPark(request, response);
 
     }
+
 
 }

@@ -202,7 +202,12 @@ public class UserControllerServlet extends HttpServlet {
 
         userDao.updateCustomer(upUser, firstName, lastName, email, username, password);
 
-        response.sendRedirect("UserControllerServlet");
+        User currentUser =(User) request.getSession().getAttribute("user");
+
+        if (currentUser.isAdmin())
+            response.sendRedirect("UserControllerServlet");
+        else
+            response.sendRedirect("CarParkControllerServlet");
 
     }
 
