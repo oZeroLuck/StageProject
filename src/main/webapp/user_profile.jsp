@@ -17,7 +17,14 @@
 
 <div id="wrapper">
     <div id="header">
-        <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
+        <c:choose>
+            <c:when test="${user.isAdmin}">
+                <a href="UserControllerServlet"><fmt:message key="label.homepage" /></a>
+            </c:when>
+            <c:otherwise>
+                <a href="CarParkControllerServlet"><fmt:message key="label.homepage" /></a>
+            </c:otherwise>
+        </c:choose>
         |
         <c:url var="parkLink" value="CarParkControllerServlet">
             <c:param name="command" value="CAR_PARK"/>
